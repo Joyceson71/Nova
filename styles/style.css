@@ -526,92 +526,6 @@ section {
     font-size: 2.4rem;
   }
 }
-
-
-
-#team{
-  background: radial-gradient(circle at top, #0b0f2b, #050816 70%);
-}
-#team h1 {
-  text-align: center;
-  font-size: 3rem;
-  margin-bottom: 60px;
-  background: linear-gradient(135deg, #22d3ee, #93c5fd);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-family: "Orbitron", sans-serif;
-}
-#team h2{
-  text-align: center;
-  font-size: 1.5rem;
-  margin-bottom: 24px;
-  font-family: "Stalinist One", sans-serif;
-}
-.team-row{
-  width: 500px;
-  margin: auto;
-  backdrop-filter: var(--blur);
-  border: 1px solid var(--border-glass);
-  border-radius: var(--radius-lg);
-  margin-bottom: 30px;
-}
-.team-row:hover{
-  transform: translateY(-12px);
-  box-shadow: 0 30px 70px rgba(37, 81, 100, 0.7);
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
-  overflow: hidden;
-}
-#team h1 {
-  text-align: center;
-  margin-bottom: 60px;
-}
-
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 32px;
-  margin-bottom: 30px;
-  animation: run 5s ease-in-out infinite alternate;
-}
-.team-card {
-  animation: float 6s ease-in-out infinite;
-}
-
-.team-card:nth-child(even) {
-  animation-delay: 1.5s;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.team-card:hover{
-  transform: translateY(-10px);
-  box-shadow: 10px 10px 20px rgba(34,211,238,0.45);
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
-}
-.team-card {
-  background: var(--bg-glass);
-  backdrop-filter: var(--blur);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-  text-align: center;
-
-}
-
-.team-card img {
-  width: 110px;
-  height: 110px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-bottom: 14px;
-  border: 2px solid var(--primary);
-}
 #contact {
   padding: 120px 8%;
   background: radial-gradient(circle at top, #0b102b, #050816);
@@ -1061,7 +975,7 @@ footer {
 
 /* Active link highlight */
 .mobile-nav a.active {
-  color: #7f5cff;
+  color: #22d3ee;
 }
 
 .mobile-nav a.active::after {
@@ -1072,13 +986,15 @@ footer {
   transform: translateX(-50%);
   width: 22px;
   height: 3px;
-  background: #7f5cff;
+  background: #22d3ee;
   border-radius: 2px;
 }
 
 .mobile-nav .contact {
   padding: 10px 24px;
-  background: linear-gradient(135deg, #641fb3, #4600ff);
+  background: linear-gradient(135deg, --bg-glass);
+  backdrop-filter: var(--blur);
+  border: 1px solid var(--border-glass);
   border-radius: 30px;
 }
 
