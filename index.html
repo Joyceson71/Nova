@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nova Nexus Hub | ECE</title>
+  <title>Nova Nexus Hub | ECE </title>
 
   <link rel="shortcut icon" href="assets/novanexus-logo.png" type="image/x-icon">
   <link rel="stylesheet" href="styles/style.css">
@@ -16,10 +16,8 @@
 </head>
 
 <body>
-
-<!-- ================= HEADER ================= -->
+<canvas id="bg-canvas"></canvas>
 <header>
-  <canvas id="bg-canvas"></canvas>
   <div class="left-section">
     <img src="assets/novanexus-logo.png" alt="Nova Nexus Logo">
     <span>NOVA<br>NEXUS<br>HUB</span>
@@ -34,38 +32,39 @@
   </nav>
 
   <div class="mobile-menu-btn" id="menuBtn">
-        <span></span>
-        <span></span>
-        <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
 
-<!-- Slide-down Mobile Nav -->
+  <!-- Slide-down Mobile Nav -->
   <div class="mobile-nav" id="mobileNav">
-      <a href="#hero" class="nav-link">Home</a>
-      <a href="#about" class="nav-link">About</a>
-      <a href="#event" class="nav-link">Events</a>
-      <a href="#vision" class="nav-link">Vision</a>
-      <a href="#gallery" class="nav-link">Gallery</a>
-      <a href="#contact" class="nav-link contact">Contact</a>
+    <a href="#hero" class="nav-link">Home</a>
+    <a href="#about" class="nav-link">About</a>
+    <a href="#events" class="nav-link">Events</a>
+    <a href="#gallery" class="nav-link">Gallery</a>
+    <a href="#vision" class="nav-link">Vision</a>
+    <a href="#contact" class="nav-link contact">Contact</a>
   </div>
 
   <div class="right-section">
     <a href="#contact" class="contact-btn">Contact</a>
   </div>
 </header>
-
 <!-- ================= HERO ================= -->
 <section id="hero">
   <div class="hero-content" data-aos="fade-up">
     <img src="assets/kings-logo.png" alt="Kings Engineering College" width="100">
     <h1>KINGS ENGINEERING COLLEGE</h1>
     <h2>Department of Electronics & Communication Engineering</h2>
-    <h3>NOVA NEXUS HUB</h3>
+    <h3>
+      <span id="typed-text"></span>
+      <span class="cursor">|</span>
+    </h3>
     <p>The Official Technical Hub of the ECE Department</p>
-    <a href="#event">Explore Events</a>
+    <a href="#events">Explore Events</a>
   </div>
 </section>
-
 
 <!-- ================= ABOUT ================= -->
 <section id="about">
@@ -119,21 +118,22 @@
 
   <div class="events-grid">
     <article class="event-card" data-aos="fade-up">
-      <span class="badge muted">Coming Soon</span>
-      <h2>Technical Workshop</h2>
-      <p>Hands-on sessions on emerging ECE technologies.</p>
-      <a class="disabled">Details Soon</a>
+      <span class="badge">Upcoming</span>
+      <h2>Nexora-2K26</h2>
+      <p>
+        This Event consists of three competitions in Paper Presentation, Project Expo and Line Follower.
+      </p>
+      <ul>
+        <li>Team Size: 2 Members</li>
+        <li>Mode: Offline</li>
+        <li>Entry Fee: ₹120 per head</li>
+        <li>Certificates for all</li>
+      </ul>
+      <a href="https://nexora2k26.vercel.app" target="_blank">Learn More</a>
     </article>
 
     <article class="event-card" data-aos="fade-up">
-      <span class="badge muted">Planned</span>
-      <h2>Expert Talk Series</h2>
-      <p>Industry experts sharing insights and trends.</p>
-      <a class="disabled">Details Soon</a>
-    </article>
-
-    <article class="event-card" data-aos="fade-up">
-      <span class="badge">Completed</span>
+      <span class="badge completed">Completed</span>
       <h2>Techathon 2K26</h2>
       <p>
         A flagship hackathon encouraging innovation and real-world problem solving.
@@ -144,14 +144,87 @@
         <li>Entry Fee: Free</li>
         <li>Certificates for all</li>
       </ul>
-      <a href="techathon.html" class="disabled">Learn More</a>
+      <a href="techathon.html" class="disabled">View Details</a>
+    </article>
+
+    <article class="event-card" data-aos="fade-up">
+      <span class="badge muted">Planned</span>
+      <h2>Expert Talk Series</h2>
+      <p>Industry experts sharing insights and trends in ECE domains.</p>
+      <ul>
+        <li>Format: Interactive Sessions</li>
+        <li>Mode: Hybrid</li>
+        <li>Entry Fee: Free</li>
+        <li>Open to all students</li>
+      </ul>
+      <a href="#" class="disabled">Details Soon</a>
     </article>
   </div>
 </section>
 
+<!-- ================= GALLERY ================= -->
+<section id="gallery">
+  <h1 data-aos="fade-up">GALLERY</h1>
+  
+  <p data-aos="fade-up" style="text-align: center; max-width: 800px; margin: 0 auto 3rem;">
+    Capturing moments of innovation, collaboration, and excellence from our events and activities.
+  </p>
+  <div class="gallery-slider-wrapper">
+
+  <button class="gallery-btn prev">&#10094;</button>
+
+  <div class="gallery-slider" id="gallerySlider">
+
+    <div class="gallery-slide">
+      <img src="assets/photo-1.jpeg" alt="">
+      <div class="gallery-overlay">
+        <h3>Techathon 2K26</h3>
+        <p>Students collaborating on innovative projects</p>
+      </div>
+    </div>
+
+    <div class="gallery-slide">
+      <img src="assets/photo-2.jpeg" alt="">
+      <div class="gallery-overlay">
+        <h3>Workshop Session</h3>
+        <p>Hands-on embedded systems training</p>
+      </div>
+    </div>
+
+    <div class="gallery-slide">
+      <img src="assets/photo-3.jpeg" alt="">
+      <div class="gallery-overlay">
+        <h3>Project Expo</h3>
+        <p>Showcasing innovations</p>
+      </div>
+    </div>
+
+    <div class="gallery-slide">
+      <img src="assets/photo-4.jpeg" alt="">
+      <div class="gallery-overlay">
+        <h3>Expert Talk</h3>
+        <p>Industry insights</p>
+      </div>
+    </div>
+
+    <div class="gallery-slide">
+      <img src="assets/photo-5.jpeg" alt="">
+      <div class="gallery-overlay">
+        <h3>Team Activities</h3>
+        <p>Collaboration & leadership</p>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="gallery-btn next">&#10095;</button>
+
+</div>
+
+</section>
+
 <!-- ================= VISION ================= -->
 <section id="vision" class="vision-combo">
-
   <!-- Intro -->
   <div class="vision-header" data-aos="fade-up">
     <span class="vision-label">OUR VISION</span>
@@ -165,7 +238,6 @@
 
   <!-- Vision Pillars -->
   <div class="vision-stack">
-
     <div class="vision-card" data-aos="fade-right">
       <span class="vision-num">01</span>
       <div class="vision-content">
@@ -220,39 +292,29 @@
         </p>
       </div>
     </div>
-
   </div>
-
 </section>
-
-<!-- Gallery  -->
- <section id="gallery">
-  <h1 data-aos="fade-up">GALLERY</h1>
-
-  <div class="gallery-grid">
-    <div class="gallery-card" data-aos="fade-up">
-      <img src="assets/photo-1.png">
-      
- </section>
 
 <!-- ================= CONTACT ================= -->
 <section id="contact">
-  <h1>CONTACT & ADDRESS</h1>
+  <h1 data-aos="fade-up">CONTACT & ADDRESS</h1>
 
   <div class="contact-wrapper">
-    <div class="contact-card">
+    <div class="contact-card" data-aos="fade-right">
+      <h3>Get In Touch</h3>
       <p><i class="fas fa-envelope"></i> novanexus.ece@kingsedu.ac.in</p>
       <p><i class="fas fa-phone"></i> +91 99436 48032</p>
       <p><i class="fas fa-phone"></i> +91 63822 53929</p>
       <p><i class="fas fa-map-marker-alt"></i> Kings Engineering College, Sriperumbudur</p>
-      <p><i class="fas fa-clock"></i>Working Hours: 9:00 AM - 2:00 PM</p>
+      <p><i class="fas fa-clock"></i> Working Hours: 9:00 AM - 2:00 PM</p>
     </div>
 
-    <div class="contact-card">
+    <div class="contact-card" data-aos="fade-left">
+      <h3>Send Us A Message</h3>
       <form>
-        <input type="text" placeholder="Your Name">
-        <input type="email" placeholder="Your Email">
-        <textarea placeholder="Your Message"></textarea>
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea placeholder="Your Message" rows="5" required></textarea>
         <button type="submit">Send Message</button>
       </form>
     </div>
@@ -261,73 +323,50 @@
 
 <!-- ================= FOOTER ================= -->
 <footer class="site-footer">
-  <p>© 2026 Nova Nexus Hub</p>
-  <p>Department of Electronics & Communication Engineering</p>
-  <p>Kings Engineering College</p>
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>Nova Nexus Hub</h3>
+      <p>Department of Electronics & Communication Engineering</p>
+      <p>Kings Engineering College</p>
+    </div>
+    
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <a href="#about">About</a>
+      <a href="#events">Events</a>
+      <a href="#vision">Vision</a>
+      <a href="#contact">Contact</a>
+    </div>
+    
+    <div class="footer-section">
+      <h3>Connect With Us</h3>
+      <div class="social-links">
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p>© 2026 Nova Nexus Hub. All Rights Reserved.</p>
+  </div>
 </footer>
 
-<!-- AOS INIT -->
+<!-- Scripts -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>AOS.init({ once: true, duration: 900 });</script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
-<script src="bg.js"></script>
-<script src="mobile.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
-
 <script>
-  
-const menuBtn = document.getElementById("menuBtn");
-const mobileNav = document.getElementById("mobileNav");
-const navLinks = document.querySelectorAll(".mobile-nav .nav-link");
-
-let menuOpen = false;
-
-/* GSAP timeline */
-const navTL = gsap.timeline({ paused: true });
-navTL.to(mobileNav, {
-  y: "-19%",
-  duration: 0.3,
-  ease: "power3.out"
-});
-
-/* Toggle menu */
-menuBtn.addEventListener("click", () => {
-  menuBtn.classList.toggle("active");
-  menuOpen ? navTL.reverse() : navTL.play();
-  menuOpen = !menuOpen;
-});
-
-/* Close on link click */
-navLinks.forEach(link => {
-  link.addEventListener("click", () => {
-    navTL.reverse();
-    menuBtn.classList.remove("active");
-    menuOpen = false;
+  AOS.init({ 
+    once: true, 
+    duration: 900,
+    offset: 100
   });
-});
-
-/* ACTIVE LINK ON SCROLL */
-const sections = document.querySelectorAll("section[id]");
-
-window.addEventListener("scroll", () => {
-  let scrollY = window.scrollY + 120;
-
-  sections.forEach(section => {
-    const sectionTop = section.offsetTop;
-    const sectionHeight = section.offsetHeight;
-    const sectionId = section.getAttribute("id");
-
-    if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-      navLinks.forEach(link => {
-        link.classList.remove("active");
-        if (link.getAttribute("href") === `#${sectionId}`) {
-          link.classList.add("active");
-        }
-      });
-    }
-  });
-});
 </script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script src="scripts/bg.js"></script>
+<script src="scripts/mobile.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="scripts/typing.js"></script>
 </body>
 </html>
