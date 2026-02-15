@@ -13,7 +13,8 @@ class GallerySlider {
     this.totalSlides = this.slides.length;
     this.isAnimating = false;
     this.autoplayInterval = null;
-    this.autoplayDelay = 5000;
+    this.autoplayDelay = 4000; // Auto-slide every 4 seconds
+    this.autoplayEnabled = true; // Enable autoplay by default
     
     // Touch/swipe variables
     this.touchStartX = 0;
@@ -34,16 +35,18 @@ class GallerySlider {
     // Add event listeners
     this.addEventListeners();
     
-    // Start autoplay
-    this.startAutoplay();
-    
     // Create navigation dots
     this.createDots();
     
     // Preload images
     this.preloadImages();
     
-    console.log(`Gallery initialized with ${this.totalSlides} slides`);
+    // Start autoplay after a short delay
+    setTimeout(() => {
+      this.startAutoplay();
+    }, 500);
+    
+    console.log(`Gallery initialized with ${this.totalSlides} slides - Autoplay enabled`);
   }
   
   addEventListeners() {
@@ -270,22 +273,76 @@ class GallerySlider {
   
   // Autoplay
   startAutoplay() {
+    if (!this.autoplayEnabled) return;
+    
     this.stopAutoplay();
+    
+    console.log('Gallery autoplay started');
+    
     this.autoplayInterval = setInterval(() => {
       this.nextSlide();
     }, this.autoplayDelay);
+    
+    // Add visual indicator for autoplay
+    this.addAutoplayIndicator();
   }
   
   stopAutoplay() {
     if (this.autoplayInterval) {
       clearInterval(this.autoplayInterval);
       this.autoplayInterval = null;
+      console.log('Gallery autoplay stopped');
     }
   }
   
   restartAutoplay() {
+    if (!this.autoplayEnabled) return;
     this.stopAutoplay();
     this.startAutoplay();
+  }
+  
+  toggleAutoplay() {
+    this.autoplayEnabled = !this.autoplayEnabled;
+    
+    if (this.autoplayEnabled) {
+      this.startAutoplay();
+    } else {
+      this.stopAutoplay();
+    }
+    
+    this.updateAutoplayButton();
+  }
+  
+  addAutoplayIndicator() {
+    const wrapper = this.slider.closest('.gallery-slider-wrapper');
+    if (!wrapper) return;
+    
+    let indicator = wrapper.querySelector('.autoplay-indicator');
+    
+    if (!indicator) {
+      indicator = document.createElement('div');
+      indicator.className = 'autoplay-indicator';
+      indicator.innerHTML = '<i class="fas fa-play"></i> Auto-playing';
+      wrapper.appendChild(indicator);
+      
+      // Add click to pause
+      indicator.addEventListener('click', () => this.toggleAutoplay());
+      indicator.style.cursor = 'pointer';
+      indicator.title = 'Click to pause autoplay';
+    }
+  }
+  
+  updateAutoplayButton() {
+    const indicator = document.querySelector('.autoplay-indicator');
+    if (!indicator) return;
+    
+    if (this.autoplayEnabled) {
+      indicator.innerHTML = '<i class="fas fa-play"></i> Auto-playing';
+      indicator.title = 'Click to pause autoplay';
+    } else {
+      indicator.innerHTML = '<i class="fas fa-pause"></i> Paused';
+      indicator.title = 'Click to resume autoplay';
+    }
   }
   
   // Navigation dots
@@ -513,6 +570,44 @@ const galleryStyles = `
     border-radius: 6px;
   }
   
+  /* Autoplay Indicator */
+  .autoplay-indicator {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(0, 102, 255, 0.9);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 10;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+  }
+  
+  .autoplay-indicator:hover {
+    background: #0066ff;
+    transform: scale(1.05);
+  }
+  
+  .autoplay-indicator i {
+    font-size: 0.9rem;
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7);
+    }
+    50% {
+      box-shadow: 0 0 0 10px rgba(0, 102, 255, 0);
+    }
+  }
+  
   /* Gallery Slider Cursor */
   .gallery-slider {
     cursor: grab;
@@ -536,6 +631,22 @@ const galleryStyles = `
   
   .gallery-slide.loaded {
     animation: none;
+  }
+  
+  /* Progress Bar for Autoplay */
+  .gallery-slider-wrapper {
+    position: relative;
+  }
+  
+  .gallery-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(to right, #0066ff, #00d9ff);
+    z-index: 10;
+    transition: width linear;
   }
   
   /* Lightbox Styles */
@@ -653,6 +764,13 @@ const galleryStyles = `
   }
   
   @media (max-width: 768px) {
+    .autoplay-indicator {
+      top: 10px;
+      left: 10px;
+      padding: 6px 12px;
+      font-size: 0.75rem;
+    }
+    
     .lightbox-close,
     .lightbox-prev,
     .lightbox-next {

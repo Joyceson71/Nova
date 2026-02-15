@@ -1,5 +1,5 @@
 // ===============================
-// BACKGROUND ANIMATION WITH THREE.JS
+// ANIMATED GRADIENT MESH BACKGROUND
 // ===============================
 
 (function() {
@@ -23,78 +23,117 @@
   
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.position.z = 50;
+  camera.position.z = 5;
 
-  // Create particles
-  const particlesGeometry = new THREE.BufferGeometry();
-  const particleCount = 1500;
+  // Create animated gradient waves
+  const geometry = new THREE.PlaneGeometry(20, 20, 50, 50);
   
-  const positions = new Float32Array(particleCount * 3);
-  const colors = new Float32Array(particleCount * 3);
-  const sizes = new Float32Array(particleCount);
+  // Custom shader material for gradient effect
+  const material = new THREE.ShaderMaterial({
+    uniforms: {
+      time: { value: 0 },
+      color1: { value: new THREE.Color(0x0066ff) },
+      color2: { value: new THREE.Color(0x00d9ff) },
+      color3: { value: new THREE.Color(0x8b5cf6) }
+    },
+    vertexShader: `
+      uniform float time;
+      varying vec2 vUv;
+      varying float vElevation;
+      
+      void main() {
+        vUv = uv;
+        
+        vec3 pos = position;
+        
+        // Create multiple wave patterns
+        float wave1 = sin(pos.x * 2.0 + time) * 0.5;
+        float wave2 = sin(pos.y * 2.0 - time * 0.7) * 0.5;
+        float wave3 = sin((pos.x + pos.y) * 1.5 + time * 0.5) * 0.3;
+        
+        pos.z = wave1 + wave2 + wave3;
+        vElevation = pos.z;
+        
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform vec3 color1;
+      uniform vec3 color2;
+      uniform vec3 color3;
+      uniform float time;
+      varying vec2 vUv;
+      varying float vElevation;
+      
+      void main() {
+        // Create animated gradient
+        float mixValue = vElevation * 0.5 + 0.5;
+        vec3 color = mix(color1, color2, vUv.x);
+        color = mix(color, color3, vUv.y);
+        color = mix(color, color1, sin(time * 0.5) * 0.5 + 0.5);
+        
+        // Add glow effect
+        float alpha = 0.3 + mixValue * 0.2;
+        
+        gl_FragColor = vec4(color, alpha);
+      }
+    `,
+    transparent: true,
+    wireframe: false,
+    side: THREE.DoubleSide
+  });
   
-  const color1 = new THREE.Color(0x0066ff); // Primary blue
-  const color2 = new THREE.Color(0x00d9ff); // Accent cyan
-  const color3 = new THREE.Color(0x8b5cf6); // Purple
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.rotation.x = -Math.PI * 0.3;
+  scene.add(mesh);
+
+  // Add floating orbs
+  const orbs = [];
+  const orbGeometry = new THREE.SphereGeometry(0.3, 32, 32);
   
-  for (let i = 0; i < particleCount; i++) {
-    // Positions
-    positions[i * 3] = (Math.random() - 0.5) * 100;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
+  for (let i = 0; i < 8; i++) {
+    const orbMaterial = new THREE.MeshBasicMaterial({
+      color: i % 2 === 0 ? 0x0066ff : 0x00d9ff,
+      transparent: true,
+      opacity: 0.6
+    });
     
-    // Colors - mix between blue and cyan
-    const mixColor = Math.random();
-    let finalColor;
+    const orb = new THREE.Mesh(orbGeometry, orbMaterial);
+    orb.position.x = (Math.random() - 0.5) * 10;
+    orb.position.y = (Math.random() - 0.5) * 10;
+    orb.position.z = (Math.random() - 0.5) * 5;
     
-    if (mixColor < 0.6) {
-      finalColor = color1;
-    } else if (mixColor < 0.9) {
-      finalColor = color2;
-    } else {
-      finalColor = color3;
-    }
+    orb.userData.speed = Math.random() * 0.02 + 0.01;
+    orb.userData.offset = Math.random() * Math.PI * 2;
     
-    colors[i * 3] = finalColor.r;
-    colors[i * 3 + 1] = finalColor.g;
-    colors[i * 3 + 2] = finalColor.b;
-    
-    // Sizes
-    sizes[i] = Math.random() * 2 + 0.5;
+    orbs.push(orb);
+    scene.add(orb);
+  }
+
+  // Add subtle stars in the background
+  const starGeometry = new THREE.BufferGeometry();
+  const starVertices = [];
+  
+  for (let i = 0; i < 200; i++) {
+    const x = (Math.random() - 0.5) * 50;
+    const y = (Math.random() - 0.5) * 50;
+    const z = (Math.random() - 0.5) * 50;
+    starVertices.push(x, y, z);
   }
   
-  particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-  particlesGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+  starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
   
-  // Particle material
-  const particlesMaterial = new THREE.PointsMaterial({
-    size: 1.5,
-    vertexColors: true,
+  const starMaterial = new THREE.PointsMaterial({
+    color: 0xffffff,
+    size: 0.05,
     transparent: true,
-    opacity: 0.8,
-    sizeAttenuation: true,
+    opacity: 0.6,
     blending: THREE.AdditiveBlending
   });
   
-  const particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
-  scene.add(particleSystem);
-  
-  // Create connecting lines
-  const lineGeometry = new THREE.BufferGeometry();
-  const linePositions = new Float32Array(particleCount * particleCount * 6);
-  lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
-  
-  const lineMaterial = new THREE.LineBasicMaterial({
-    color: 0x0066ff,
-    transparent: true,
-    opacity: 0.1,
-    blending: THREE.AdditiveBlending
-  });
-  
-  const lineSystem = new THREE.LineSegments(lineGeometry, lineMaterial);
-  scene.add(lineSystem);
-  
+  const stars = new THREE.Points(starGeometry, starMaterial);
+  scene.add(stars);
+
   // Mouse interaction
   let mouseX = 0;
   let mouseY = 0;
@@ -107,65 +146,37 @@
   });
   
   // Animation
+  const clock = new THREE.Clock();
+  
   function animate() {
     requestAnimationFrame(animate);
     
+    const elapsedTime = clock.getElapsedTime();
+    
+    // Update shader time
+    material.uniforms.time.value = elapsedTime;
+    
     // Smooth mouse follow
-    targetX += (mouseX - targetX) * 0.02;
-    targetY += (mouseY - targetY) * 0.02;
+    targetX += (mouseX - targetX) * 0.05;
+    targetY += (mouseY - targetY) * 0.05;
     
-    // Rotate particle system
-    particleSystem.rotation.y += 0.0003;
-    particleSystem.rotation.x = targetY * 0.1;
-    particleSystem.rotation.y = targetX * 0.1;
+    // Rotate mesh based on mouse
+    mesh.rotation.x = -Math.PI * 0.3 + targetY * 0.3;
+    mesh.rotation.y = targetX * 0.3;
     
-    // Animate individual particles
-    const positions = particleSystem.geometry.attributes.position.array;
-    const time = Date.now() * 0.0001;
-    
-    for (let i = 0; i < particleCount; i++) {
-      const i3 = i * 3;
+    // Animate orbs
+    orbs.forEach((orb, i) => {
+      orb.position.y = Math.sin(elapsedTime * orb.userData.speed + orb.userData.offset) * 3;
+      orb.position.x = Math.cos(elapsedTime * orb.userData.speed * 0.5 + orb.userData.offset) * 4;
       
-      // Wave motion
-      positions[i3 + 1] += Math.sin(time + positions[i3]) * 0.01;
-      
-      // Boundary check and reset
-      if (positions[i3 + 1] > 50) positions[i3 + 1] = -50;
-      if (positions[i3 + 1] < -50) positions[i3 + 1] = 50;
-    }
+      // Pulse effect
+      const scale = 1 + Math.sin(elapsedTime * 2 + i) * 0.2;
+      orb.scale.set(scale, scale, scale);
+    });
     
-    particleSystem.geometry.attributes.position.needsUpdate = true;
-    
-    // Update connecting lines
-    const linePositions = lineSystem.geometry.attributes.position.array;
-    let lineIndex = 0;
-    const maxDistance = 15;
-    
-    for (let i = 0; i < particleCount; i++) {
-      const i3 = i * 3;
-      
-      for (let j = i + 1; j < particleCount; j++) {
-        const j3 = j * 3;
-        
-        const dx = positions[i3] - positions[j3];
-        const dy = positions[i3 + 1] - positions[j3 + 1];
-        const dz = positions[i3 + 2] - positions[j3 + 2];
-        const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        
-        if (distance < maxDistance && lineIndex < linePositions.length - 6) {
-          linePositions[lineIndex++] = positions[i3];
-          linePositions[lineIndex++] = positions[i3 + 1];
-          linePositions[lineIndex++] = positions[i3 + 2];
-          
-          linePositions[lineIndex++] = positions[j3];
-          linePositions[lineIndex++] = positions[j3 + 1];
-          linePositions[lineIndex++] = positions[j3 + 2];
-        }
-      }
-    }
-    
-    lineSystem.geometry.setDrawRange(0, lineIndex / 3);
-    lineSystem.geometry.attributes.position.needsUpdate = true;
+    // Rotate stars slowly
+    stars.rotation.y = elapsedTime * 0.05;
+    stars.rotation.x = elapsedTime * 0.03;
     
     renderer.render(scene, camera);
   }
@@ -181,7 +192,19 @@
   
   // Performance optimization for mobile
   if (window.innerWidth < 768) {
-    particlesMaterial.size = 1;
-    lineMaterial.opacity = 0.05;
+    // Reduce orb count on mobile
+    orbs.forEach((orb, i) => {
+      if (i > 4) {
+        scene.remove(orb);
+        orbs.splice(i, 1);
+      }
+    });
+    
+    // Reduce star count
+    const reducedStars = [];
+    for (let i = 0; i < starVertices.length; i += 6) {
+      reducedStars.push(starVertices[i], starVertices[i + 1], starVertices[i + 2]);
+    }
+    starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(reducedStars, 3));
   }
 })();
