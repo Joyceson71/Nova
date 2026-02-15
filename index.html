@@ -13,6 +13,8 @@
 
   <!-- AOS -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles/gallery-styles.css">
 </head>
 
 <body>
@@ -162,65 +164,68 @@
   </div>
 </section>
 
-<!-- ================= GALLERY ================= -->
 <section id="gallery">
   <h1 data-aos="fade-up">GALLERY</h1>
   
   <p data-aos="fade-up" style="text-align: center; max-width: 800px; margin: 0 auto 3rem;">
     Capturing moments of innovation, collaboration, and excellence from our events and activities.
   </p>
-  <div class="gallery-slider-wrapper">
+  
+  <div class="gallery-container">
+    <button class="gallery-nav-btn prev" aria-label="Previous">
+      <i class="fas fa-chevron-left"></i>
+    </button>
 
-  <button class="gallery-btn prev">&#10094;</button>
+    <div class="gallery-scroll-wrapper" id="galleryScrollWrapper">
+      <div class="gallery-slide-item">
+        <img src="assets/photo-1.jpeg" alt="Techathon 2K26">
+        <div class="gallery-overlay">
+          <h3>Techathon 2K26</h3>
+        </div>
+      </div>
 
-  <div class="gallery-slider" id="gallerySlider">
+      <div class="gallery-slide-item">
+        <img src="assets/photo-2.jpeg" alt="Workshop Session">
+        <div class="gallery-overlay">
+          <h3>Nova Nexus Inaugration</h3>
+        </div>
+      </div>
 
-    <div class="gallery-slide">
-      <img src="assets/photo-1.jpeg" alt="">
-      <div class="gallery-overlay">
-        <h3>Techathon 2K26</h3>
-        <p>Students collaborating on innovative projects</p>
+      <div class="gallery-slide-item">
+        <img src="assets/photo-3.jpeg" alt="Project Expo">
+        <div class="gallery-overlay">
+          <h3>Nova Nexus Hub</h3>
+        </div>
+      </div>
+
+      <div class="gallery-slide-item">
+        <img src="assets/photo-4.jpeg" alt="Expert Talk">
+        <div class="gallery-overlay">
+          <h3>Team Members</h3>
+        </div>
+      </div>
+
+      <div class="gallery-slide-item">
+        <img src="assets/photo-5.jpeg" alt="Team Activities">
+        <div class="gallery-overlay">
+          <h3>Team Activities</h3>
+        </div>
+      </div>
+      <div class="gallery-slide-item">
+        <img src="assets/photo-6.jpeg" alt="Team Activities">
+        <div class="gallery-overlay">
+          <h3>Glimpse of Techathon-2k26</h3>
+        </div>
       </div>
     </div>
 
-    <div class="gallery-slide">
-      <img src="assets/photo-2.jpeg" alt="">
-      <div class="gallery-overlay">
-        <h3>Workshop Session</h3>
-        <p>Hands-on embedded systems training</p>
-      </div>
-    </div>
-
-    <div class="gallery-slide">
-      <img src="assets/photo-3.jpeg" alt="">
-      <div class="gallery-overlay">
-        <h3>Project Expo</h3>
-        <p>Showcasing innovations</p>
-      </div>
-    </div>
-
-    <div class="gallery-slide">
-      <img src="assets/photo-4.jpeg" alt="">
-      <div class="gallery-overlay">
-        <h3>Expert Talk</h3>
-        <p>Industry insights</p>
-      </div>
-    </div>
-
-    <div class="gallery-slide">
-      <img src="assets/photo-5.jpeg" alt="">
-      <div class="gallery-overlay">
-        <h3>Team Activities</h3>
-        <p>Collaboration & leadership</p>
-      </div>
-    </div>
-
+    <button class="gallery-nav-btn next" aria-label="Next">
+      <i class="fas fa-chevron-right"></i>
+    </button>
   </div>
 
-  <button class="gallery-btn next">&#10095;</button>
-
-</div>
-
+  <!-- Progress Indicator -->
+  <div class="gallery-progress-dots" id="galleryDots"></div>
 </section>
 
 <!-- ================= VISION ================= -->
