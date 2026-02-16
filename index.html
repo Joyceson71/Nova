@@ -64,10 +64,13 @@
       <img src="assets/novanexus-logo.png" alt="Nova Nexus Logo" style="text-align: center;">
       <h1>KINGS ENGINEERING COLLEGE</h1>
       <h2>Department of Electronics & Communication Engineering</h2>
-      <h3>Welcome to Nova Nexus Hub</h3>
+      <h3>
+        <span id="typed-text"></span>
+        <span class="cursor">|</span>
+      </h3>
       <p>The Official Technical Hub of the ECE Department</p>
-      <a href="#about" class="btn-primary">Explore More</a>
-      <a href="#events" class="explore-btn">View Events</a>
+      <a href="#about" class="explore-btn">Explore More</a>
+      <a href="#events" class="btn-primary">View Events</a>
     </div>
   </section>
 
@@ -124,6 +127,7 @@
           <li>Mode: Offline</li>
           <li>Entry Fee: ₹120 per head</li>
           <li>Certificates for all</li>
+          <li><a href="nexora2k26.vercel.app"  class="btn-primary">Learn More</a></li>
         </ul>
       </article>
 
@@ -154,30 +158,49 @@
     </div>
   </section>
 
-  <!-- ============ GALLERY SECTION ============ -->
-<section id="gallery">
-  <h1 style="text-align: center;">GALLERY</h1>
-  <div class="gallery-slider">
-  <div class="gallery-track">
+  <section id="gallery">
+  <h1>GALLERY</h1>
 
-    <div class="gallery-item"><img src="assets/photo-1.jpeg" alt=""></div>
-    <div class="gallery-item"><img src="assets/photo-2.jpeg" alt=""></div>
-    <div class="gallery-item"><img src="assets/photo-3.jpeg" alt=""></div>
-    <div class="gallery-item"><img src="assets/photo-4.jpeg" alt=""></div>
-    <div class="gallery-item"><img src="assets/photo-5.jpeg" alt=""></div>
-    <div class="gallery-item"><img src="assets/photo-6.jpeg" alt=""></div>
+  <div class="gallery-wrapper">
+    <div class="gallery-track">
 
-    <!-- Duplicate for seamless loop -->
-    <div class="gallery-item"><img src="assets/photo-1.jpeg" alt=""></div>
-    <div class="gallery-item"><img src="assets/photo-2.jpeg" alt=""></div>
-    <div class="gallery-item"><img src="assets/photo-3.jpeg" alt=""></div>
-    <div class="gallery-item"><img src="assets/photo-4.jpeg" alt=""></div>
-    <div class="gallery-item"><img src="assets/photo-5.jpeg" alt=""></div>
-    <div class="gallery-item"><img src="assets/photo-6.jpeg" alt=""></div>
+      <div class="gallery-card">
+        <img src="assets/photo-1.jpeg" alt="">
+        <div class="gallery-overlay">
+          <h3>Techathon 2K26</h3>
+        </div>
+      </div>
 
+      <div class="gallery-card">
+        <img src="assets/photo-2.jpeg" alt="">
+        <div class="gallery-overlay">
+          <h3>Nova Nexus Inaguration</h3>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="assets/photo-3.jpeg" alt="">
+        <div class="gallery-overlay">
+          <h3>Nova Nexus</h3>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="assets/photo-4.jpeg" alt="">
+        <div class="gallery-overlay">
+          <h3>Our Team</h3>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="assets/photo-5.jpeg" alt="">
+        <div class="gallery-overlay">
+          <h3>Glimpse of Techathon</h3>
+        </div>
+      </div>
+
+    </div>
   </div>
-</div>
-
 </section>
 
   <!-- ============ VISION SECTION ============ -->
@@ -291,10 +314,13 @@
   </button>
 
   <script src="scripts/bg-geometric.js"></script>
-  
-  <!-- Main JavaScript for UI interactions -->
+  <script src="scripts/bg.js"></script>
   <script src="scripts/main.js"></script>
   <script src="scripts/gallery.js"></script>
-
+  <script src="scripts/typing.js"></script>
+  <script src="scripts/mobile.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </body>
 </html>

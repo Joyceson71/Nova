@@ -10,7 +10,7 @@
   
   // Array of texts to type
   const textArray = [
-    'Nova Nexus', 
+    ' Welcome to Nova Nexus Club', 
     'Innovation Hub',
     'Technical Excellence',
     'Future Engineers',
