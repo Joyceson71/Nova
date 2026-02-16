@@ -656,22 +656,8 @@ header.hidden {
   margin-bottom: 1rem;
   font-weight: var(--font-black);
   letter-spacing: var(--tracking-tight);
-  animation: titlePop 1.2s var(--transition-bounce);
 }
 
-@keyframes titlePop {
-  0% {
-    transform: scale(0.3);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
 
 .hero-content h2 {
   font-size: var(--text-2xl);
