@@ -672,9 +672,12 @@ header.hidden {
   z-index: var(--z-10);
   max-width: 1000px;
   margin: 0 auto;
+  align-items: center;
 }
 
 .hero-content img {
+  display: block;
+  margin: 0 auto;
   width: 150px;
   height: 150px;
   border: var(--border-width) solid var(--border-ink);
@@ -714,19 +717,7 @@ header.hidden {
   letter-spacing: var(--tracking-tight);
 }
 
-@keyframes titlePop {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
+
 
 .hero-content h2 {
   font-size: var(--text-2xl);
