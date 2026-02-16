@@ -622,8 +622,8 @@ header.hidden {
     0 0 30px rgba(255, 46, 99, 0.6);
   background: var(--anime-dark);
   color: var(--cyber-yellow);
+  border: transparent;
 }
-
 .contact-btn:active,
 .btn-primary:active,
 .hero-content > a.btn-primary:active {
@@ -1021,35 +1021,16 @@ header.hidden {
   font-size: var(--text-sm);
   position: relative;
   overflow: hidden;
+  margin-right: 20px;
 }
-
-.explore-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 0;
-  height: 0;
-  background: var(--cyber-yellow);
-  color: var(--anime-dark);
-  border-radius: 50%;
-  transition: all 0.6s ease;
-}
-
-.explore-btn:hover::before {
-  width: 300%;
-  height: 300%;
-}
-
 .explore-btn:hover {
   transform: translate(0, 0);
+  background: var(--cyber-yellow);
   box-shadow: 
     var(--hard-shadow-hover),
     0 0 25px rgba(252, 211, 77, 0.5);
   color: var(--anime-dark);
 }
-
 .explore-btn:active {
   transform: translate(2px, 2px);
   box-shadow: none;
@@ -1158,8 +1139,8 @@ section h1::before {
   );
   z-index: -1;
   animation: haloGlow 3s ease-in-out infinite;
-}}
 }
+
 
 section h2 {
   font-size: var(--text-3xl);
@@ -2038,7 +2019,6 @@ button:disabled:hover,
 .footer-section a:hover {
   color: var(--cyber-yellow);
 }
-
 .social-links {
   display: flex;
   gap: 12px;
@@ -2060,6 +2040,7 @@ button:disabled:hover,
   box-shadow: var(--hard-shadow-sm);
   position: relative;
   overflow: hidden;
+  z-index: 1;
 }
 
 .social-links a::before {
@@ -2073,6 +2054,7 @@ button:disabled:hover,
   background: var(--power-pink);
   border-radius: 50%;
   transition: all 0.5s ease;
+  z-index: -1;
 }
 
 .social-links a:hover::before {
@@ -2089,6 +2071,17 @@ button:disabled:hover,
   border-color: var(--power-pink);
 }
 
+/* Icon stays visible on top */
+.social-links a i {
+  position: relative;
+  z-index: 1;
+  transition: all var(--transition-fast);
+}
+
+.social-links a:hover i {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+}
 .footer-bottom {
   text-align: center;
   padding-top: 2rem;
