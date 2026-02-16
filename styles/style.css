@@ -3327,8 +3327,3 @@ img {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
 }
-
-/* Font Display Optimization */
-@font-face {
-  font-display: swap;
-}
