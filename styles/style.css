@@ -370,14 +370,6 @@ header::before {
   animation: rainbowSlide 3s linear infinite;
 }
 
-@keyframes rainbowSlide {
-  0% {
-    background-position: 0% 0%;
-  }
-  100% {
-    background-position: 200% 0%;
-  }
-}
 
 header.scrolled {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -410,15 +402,6 @@ header.hidden {
     0 0 0 4px var(--mecha-white),
     0 0 20px rgba(252, 211, 77, 0.3);
   animation: logoFloat 3s ease-in-out infinite;
-}
-
-@keyframes logoFloat {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-5px) rotate(5deg);
-  }
 }
 
 .left-section img:hover {
@@ -742,19 +725,6 @@ header.hidden {
   animation: slideDownBounce 0.5s var(--transition-bounce);
 }
 
-@keyframes slideDownBounce {
-  0% {
-    opacity: 0;
-    transform: translateY(-30px) scale(0.9);
-  }
-  60% {
-    transform: translateY(10px) scale(1.02);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
 
 .mobile-nav a {
   color: var(--anime-dark);
@@ -854,16 +824,7 @@ header.hidden {
   animation: burstPulse 6s ease-in-out infinite;
 }
 
-@keyframes burstPulse {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.9;
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.1);
-    opacity: 1;
-  }
-}
+
 
 /* Energy particles in hero */
 #hero::after {
@@ -934,14 +895,6 @@ header.hidden {
   z-index: -1;
 }
 
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
 .hero-content img:hover {
   transform: scale(1.15) rotate(10deg);
@@ -1005,29 +958,6 @@ header.hidden {
   animation: shimmer 2s ease-in-out infinite;
 }
 
-@keyframes shimmer {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-
-@keyframes slideInRightEnhanced {
-  0% {
-    transform: skewX(-10deg) translateX(150px);
-    opacity: 0;
-  }
-  60% {
-    transform: skewX(-10deg) translateX(-10px);
-  }
-  100% {
-    transform: skewX(-10deg) translateX(0);
-    opacity: 1;
-  }
-}
-
 .hero-content h3 {
   font-size: var(--text-3xl);
   margin-bottom: 2rem;
@@ -1037,16 +967,6 @@ header.hidden {
   position: relative;
 }
 
-@keyframes fadeInUpEnhanced {
-  0% {
-    transform: translateY(40px) scale(0.95);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-}
 
 .hero-content p {
   max-width: 700px;
@@ -1082,14 +1002,6 @@ header.hidden {
   animation: textShimmer 3s ease-in-out infinite;
 }
 
-@keyframes textShimmer {
-  0%, 100% {
-    left: -100%;
-  }
-  50% {
-    left: 150%;
-  }
-}
 
 .explore-btn {
   display: inline-block;
@@ -1165,14 +1077,7 @@ section::before {
   animation: sectionGlow 10s ease-in-out infinite;
 }
 
-@keyframes sectionGlow {
-  0%, 100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
+
 
 section.section-sm {
   padding: var(--section-padding-sm);
@@ -1236,14 +1141,7 @@ section h1::after {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-@keyframes zigzagMove {
-  0% {
-    background-position: 0 0, 0 0;
-  }
-  100% {
-    background-position: 20px 0, -20px 0;
-  }
-}
+
 
 section h1::before {
   content: '';
@@ -1260,17 +1158,7 @@ section h1::before {
   );
   z-index: -1;
   animation: haloGlow 3s ease-in-out infinite;
-}
-
-@keyframes haloGlow {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.5;
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.2);
-    opacity: 0.8;
-  }
+}}
 }
 
 section h2 {
@@ -1422,14 +1310,7 @@ section p {
   animation: iconFloat 3s ease-in-out infinite;
 }
 
-@keyframes iconFloat {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-10px) rotate(5deg);
-  }
-}
+
 
 .highlight-card:hover i {
   transform: scale(1.3) rotate(15deg);
@@ -1550,15 +1431,6 @@ section p {
   text-shadow: 0 0 10px rgba(255, 46, 99, 0.5);
 }
 
-@keyframes arrowPulse {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(5px);
-  }
-}
-
 .event-card ul li:hover {
   padding-left: 10px;
   border-color: var(--hero-blue);
@@ -1648,14 +1520,7 @@ section p {
   animation: numberFloat 4s ease-in-out infinite;
 }
 
-@keyframes numberFloat {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
-}
+
 
 .vision-num::before {
   content: attr(data-number);
@@ -1679,20 +1544,7 @@ section p {
   animation: glitchNumber 0.5s ease;
 }
 
-@keyframes glitchNumber {
-  0%, 100% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(-5px, 5px);
-  }
-  50% {
-    transform: translate(5px, -5px);
-  }
-  75% {
-    transform: translate(-5px, -5px);
-  }
-}
+
 
 .vision-content {
   flex: 1;
@@ -1842,14 +1694,7 @@ section p {
   animation: quoteFloat 4s ease-in-out infinite;
 }
 
-@keyframes quoteFloat {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-10px) rotate(-5deg);
-  }
-}
+
 
 .testimonial-card:hover::before {
   opacity: 0.15;
@@ -1872,16 +1717,6 @@ section p {
   animation: fadeInLeft 0.6s ease;
 }
 
-@keyframes fadeInLeft {
-  0% {
-    transform: translateX(-20px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
 
 .testimonial-card .author img {
   width: 60px;
