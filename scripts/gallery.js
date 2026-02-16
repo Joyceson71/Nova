@@ -1,76 +1,157 @@
-/* ============================================================================
-   NOVA NEXUS HUB - GALLERY AUTO-SLIDING SCRIPT
-   Cinematic infinite auto-scroll with pause on hover
-   ============================================================================ */
+// Auto-scrolling Gallery with Smooth Infinite Loop
 
 document.addEventListener('DOMContentLoaded', function() {
-  const track = document.querySelector(".gallery-track");
-  const cards = document.querySelectorAll(".gallery-card");
+  const galleryTrack = document.querySelector('.gallery-track');
   
-  if (!track || cards.length === 0) {
-    console.warn('Gallery elements not found');
-    return;
-  }
+  if (!galleryTrack) return;
 
-  // Duplicate cards for seamless infinite loop
-  cards.forEach(card => {
+  let scrollPosition = 0;
+  let isScrolling = true;
+  let scrollSpeed = 0.5; // Pixels per frame
+  let animationFrame;
+
+  // Clone gallery items for seamless loop
+  const galleryCards = Array.from(galleryTrack.children);
+  galleryCards.forEach(card => {
     const clone = card.cloneNode(true);
-    track.appendChild(clone);
+    galleryTrack.appendChild(clone);
   });
 
-  // Calculate total width for seamless loop
-  const totalWidth = track.scrollWidth / 2;
+  function autoScroll() {
+    if (!isScrolling) return;
+    
+    scrollPosition += scrollSpeed;
+    
+    // Reset scroll position when first set of items has scrolled past
+    const cardWidth = galleryCards[0].offsetWidth + 40; // Including gap
+    const totalWidth = cardWidth * galleryCards.length;
+    
+    if (scrollPosition >= totalWidth) {
+      scrollPosition = 0;
+    }
+    
+    galleryTrack.style.transform = `translateX(-${scrollPosition}px)`;
+    
+    animationFrame = requestAnimationFrame(autoScroll);
+  }
 
-  // Cinematic infinite auto-scroll animation
-  const animation = gsap.to(track, {
-    x: -totalWidth,
-    duration: 25, // Adjust speed: lower = faster (e.g., 15 for faster, 35 for slower)
-    ease: "none",
-    repeat: -1,
-    modifiers: {
-      x: gsap.utils.unitize(x => parseFloat(x) % totalWidth)
+  // Start auto-scroll
+  autoScroll();
+
+  // Pause on hover
+  galleryTrack.addEventListener('mouseenter', function() {
+    isScrolling = false;
+  });
+
+  galleryTrack.addEventListener('mouseleave', function() {
+    isScrolling = true;
+    autoScroll();
+  });
+
+  // Pause on touch
+  galleryTrack.addEventListener('touchstart', function() {
+    isScrolling = false;
+  });
+
+  galleryTrack.addEventListener('touchend', function() {
+    setTimeout(() => {
+      isScrolling = true;
+      autoScroll();
+    }, 2000);
+  });
+
+  // Manual scroll with mouse drag
+  let isDragging = false;
+  let startX;
+  let scrollLeft;
+
+  galleryTrack.addEventListener('mousedown', function(e) {
+    isDragging = true;
+    isScrolling = false;
+    startX = e.pageX - galleryTrack.offsetLeft;
+    scrollLeft = scrollPosition;
+    galleryTrack.style.cursor = 'grabbing';
+  });
+
+  galleryTrack.addEventListener('mouseleave', function() {
+    if (isDragging) {
+      isDragging = false;
+      isScrolling = true;
+      galleryTrack.style.cursor = 'grab';
     }
   });
 
-  // Smooth pause on hover
-  track.addEventListener("mouseenter", () => {
-    gsap.to(animation, {
-      timeScale: 0, // Pause
-      duration: 0.5,
-      ease: "power2.out"
-    });
+  galleryTrack.addEventListener('mouseup', function() {
+    if (isDragging) {
+      isDragging = false;
+      setTimeout(() => {
+        isScrolling = true;
+      }, 1000);
+      galleryTrack.style.cursor = 'grab';
+    }
   });
 
-  // Smooth resume when mouse leaves
-  track.addEventListener("mouseleave", () => {
-    gsap.to(animation, {
-      timeScale: 1, // Resume
-      duration: 0.5,
-      ease: "power2.in"
-    });
+  galleryTrack.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - galleryTrack.offsetLeft;
+    const walk = (x - startX) * 2;
+    scrollPosition = scrollLeft - walk;
+    
+    // Keep within bounds
+    const cardWidth = galleryCards[0].offsetWidth + 40;
+    const totalWidth = cardWidth * galleryCards.length;
+    
+    if (scrollPosition < 0) scrollPosition = 0;
+    if (scrollPosition > totalWidth) scrollPosition = totalWidth;
   });
 
-  // Mobile touch support - pause on touch
-  let isPaused = false;
+  // Touch scroll
+  let touchStartX = 0;
+  let touchScrollLeft = 0;
 
-  track.addEventListener("touchstart", () => {
-    gsap.to(animation, {
-      timeScale: 0,
-      duration: 0.3
-    });
-    isPaused = true;
+  galleryTrack.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].pageX;
+    touchScrollLeft = scrollPosition;
   });
 
-  track.addEventListener("touchend", () => {
-    // Resume after 1 second delay
-    setTimeout(() => {
-      if (isPaused) {
-        gsap.to(animation, {
-          timeScale: 1,
-          duration: 0.5
-        });
-        isPaused = false;
+  galleryTrack.addEventListener('touchmove', function(e) {
+    const x = e.touches[0].pageX;
+    const walk = (touchStartX - x) * 2;
+    scrollPosition = touchScrollLeft + walk;
+    
+    const cardWidth = galleryCards[0].offsetWidth + 40;
+    const totalWidth = cardWidth * galleryCards.length;
+    
+    if (scrollPosition < 0) scrollPosition = 0;
+    if (scrollPosition > totalWidth) scrollPosition = totalWidth;
+  });
+
+  // Adjust on window resize
+  window.addEventListener('resize', function() {
+    cancelAnimationFrame(animationFrame);
+    scrollPosition = 0;
+    galleryTrack.style.transform = 'translateX(0)';
+    autoScroll();
+  });
+
+  // Pause when gallery is not in viewport
+  const gallerySection = document.getElementById('gallery');
+  const galleryObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        if (!isDragging) {
+          isScrolling = true;
+          autoScroll();
+        }
+      } else {
+        isScrolling = false;
+        cancelAnimationFrame(animationFrame);
       }
-    }, 1000);
-  });
+    });
+  }, { threshold: 0.1 });
+
+  if (gallerySection) {
+    galleryObserver.observe(gallerySection);
+  }
 });
