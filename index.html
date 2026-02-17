@@ -327,7 +327,7 @@
 
       <article class="contact-card reveal">
         <h3>Send Us A Message</h3>
-        <form class="contact-form" action="https://formspree.io/f/xwvnbyqj" method="post">
+        <form class="contact-form" id="contactForm">
           <label for="name" class="visually-hidden">Your Name</label>
           <input type="text" id="name" name="name" placeholder="Your Name" required>
           
@@ -338,6 +338,7 @@
           <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
           
           <button type="submit">Send Message</button>
+          <p id="form-status"></p>
         </form>
       </article>
     </div>
@@ -390,5 +391,8 @@
   <script src="scripts/gallery.js"></script>
   <script src="scripts/typing.js"></script>
   <script src="scripts/mobile.js"></script>
+  <script src="scripts/forms.js"></script>
+
+
 </body>
 </html>
