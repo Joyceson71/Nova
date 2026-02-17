@@ -1,9 +1,3 @@
-/**
- * ===============================
- * 2D ANIMATED BACKGROUND
- * Canvas-based Animation with Lines & Particles
- * ===============================
- */
 
 class AnimatedBackground2D {
   constructor(canvasId) {

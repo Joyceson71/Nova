@@ -1,0 +1,190 @@
+/* ============ HEADER ============ */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 5%;
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: var(--border-width) solid var(--border-ink);
+  z-index: var(--z-fixed);
+  transition: all var(--transition-smooth);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--hero-blue) 0%,
+    var(--accent-purple) 25%,
+    var(--power-pink) 50%,
+    var(--cyber-yellow) 75%,
+    var(--hero-blue) 100%
+  );
+  background-size: 200% 100%;
+  animation: rainbowSlide 3s linear infinite;
+}
+
+@keyframes rainbowSlide {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 0%;
+  }
+}
+
+header.scrolled {
+  padding: 0.8rem 5%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+header.hidden {
+  transform: translateY(-100%);
+}
+
+/* Left Section */
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: var(--z-50);
+}
+
+.left-section img {
+  width: 50px;
+  height: 50px;
+  border: var(--border-width) solid var(--border-ink);
+  border-radius: var(--radius-full);
+  background: var(--cyber-yellow);
+  transition: all var(--transition-elastic);
+  object-fit: cover;
+  box-shadow: 
+    var(--hard-shadow-sm),
+    0 0 0 4px var(--mecha-white);
+  animation: logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.left-section img:hover {
+  transform: rotate(360deg) scale(1.15);
+}
+
+.left-section img:nth-child(2) {
+  margin-left: -0.5rem;
+  animation-delay: 0.5s;
+}
+
+.left-section span {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  color: var(--anime-dark);
+  text-shadow: 
+    2px 2px 0 var(--hero-blue),
+    4px 4px 0 var(--border-ink);
+  letter-spacing: var(--tracking-wide);
+  line-height: 1.2;
+  font-weight: var(--font-bold);
+}
+
+/* Center Navigation */
+.center-section {
+  display: flex;
+  gap: 2rem;
+  background: var(--anime-dark);
+  padding: 0.5rem 1.5rem;
+  border-radius: var(--radius-full);
+  transform: skewX(-15deg);
+  box-shadow: var(--hard-shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.center-section a {
+  color: var(--mecha-white);
+  text-decoration: none;
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  font-size: var(--text-sm);
+  transform: skewX(15deg);
+  transition: all var(--transition-fast);
+  position: relative;
+  padding: 0.25rem 0;
+  letter-spacing: var(--tracking-wide);
+}
+
+.center-section a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--power-pink), var(--cyber-yellow));
+  transition: width var(--transition-smooth);
+}
+
+.center-section a:hover {
+  color: var(--cyber-yellow);
+}
+
+.center-section a:hover::after,
+.center-section a.active::after {
+  width: 100%;
+}
+
+/* Contact Button */
+.contact-btn,
+.btn-primary {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  background: var(--power-pink);
+  color: var(--mecha-white);
+  text-decoration: none;
+  font-weight: var(--font-extrabold);
+  text-transform: uppercase;
+  border: var(--border-width) solid var(--border-ink);
+  border-radius: var(--radius-md);
+  box-shadow: var(--hard-shadow);
+  transition: all var(--transition-fast);
+  transform: translate(-4px, -4px);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: var(--tracking-wide);
+  font-size: var(--text-sm);
+}
+
+.contact-btn:hover,
+.btn-primary:hover {
+  transform: translate(0, 0);
+  box-shadow: var(--hard-shadow-hover);
+  background: var(--anime-dark);
+  color: var(--cyber-yellow);
+}
+
+.contact-btn:active,
+.btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}

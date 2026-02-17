@@ -1,0 +1,199 @@
+/* ============ HERO SECTION ============ */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 150px 5% 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+#hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  height: 90vw;
+  max-width: 1200px;
+  max-height: 1200px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.6) 30%,
+    transparent 70%
+  );
+  z-index: -1;
+  opacity: 0.9;
+  pointer-events: none;
+  animation: burstPulse 6s ease-in-out infinite;
+}
+
+@keyframes burstPulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+.hero-content {
+  position: relative;
+  z-index: var(--z-10);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.hero-content img {
+  width: 150px;
+  height: 150px;
+  border: var(--border-width-thick) solid var(--border-ink);
+  background: var(--mecha-white);
+  border-radius: var(--radius-full);
+  margin: 0 auto 2rem;
+  box-shadow: 
+    var(--hard-shadow),
+    0 0 0 6px var(--mecha-white);
+  transition: all var(--transition-elastic);
+  animation: logoFloat 4s ease-in-out infinite;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-content img:hover {
+  transform: scale(1.15) rotate(10deg);
+}
+
+.hero-content h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 6vw, 5rem);
+  line-height: var(--leading-tight);
+  color: var(--anime-dark);
+  text-shadow: 
+    4px 4px 0 var(--mecha-white), 
+    6px 6px 0 var(--border-ink);
+  margin-bottom: 1rem;
+  font-weight: var(--font-black);
+  letter-spacing: var(--tracking-tight);
+}
+
+.hero-content h2 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-extrabold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: 2rem;
+  background: var(--anime-dark);
+  color: var(--cyber-yellow);
+  display: inline-block;
+  padding: 0.4rem 1.5rem;
+  transform: skewX(-10deg);
+  box-shadow: var(--hard-shadow-sm);
+  animation: slideInRight 1s var(--transition-bounce) 0.3s both;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100px) skewX(-10deg);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) skewX(-10deg);
+    opacity: 1;
+  }
+}
+
+.typed-container {
+  min-height: 60px;
+}
+
+.hero-content h3 {
+  font-size: var(--text-3xl);
+  margin-bottom: 2rem;
+  animation: fadeInUp 1s ease 0.5s both;
+  font-weight: var(--font-semibold);
+  color: var(--anime-dark);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cursor {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.about-intro {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+}
+
+.hero-content p {
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  font-size: var(--text-xl);
+  font-weight: var(--font-medium);
+  background: var(--mecha-white);
+  padding: 1.5rem;
+  border: var(--border-width-thin) solid var(--border-ink);
+  border-radius: var(--radius-md);
+  box-shadow: var(--hard-shadow-sm);
+  animation: fadeInUp 1s ease 0.7s both;
+  line-height: var(--leading-relaxed);
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.explore-btn {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  background: var(--mecha-white);
+  color: var(--anime-dark);
+  text-decoration: none;
+  font-weight: var(--font-bold);
+  border: var(--border-width) solid var(--border-ink);
+  border-radius: var(--radius-md);
+  box-shadow: var(--hard-shadow);
+  transform: translate(-4px, -4px);
+  transition: all var(--transition-elastic);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  font-size: var(--text-sm);
+}
+
+.explore-btn:hover {
+  transform: translate(0, 0);
+  background: var(--cyber-yellow);
+  box-shadow: var(--hard-shadow-hover);
+}
+
+.explore-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}

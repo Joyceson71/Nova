@@ -1,0 +1,85 @@
+/* ============ VISION SECTION ============ */
+.vision-stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Vision Cards */
+.vision-card {
+  background: var(--mecha-white);
+  border: var(--border-width) solid var(--border-ink);
+  padding: 2rem;
+  position: relative;
+  transition: all var(--transition-smooth);
+  box-shadow: var(--hard-shadow-md);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.vision-card:hover {
+  transform: translate(-8px, -8px);
+  box-shadow: var(--hard-shadow-lg);
+  border-color: var(--hero-blue);
+}
+
+.vision-num {
+  font-family: var(--font-heading);
+  font-size: var(--text-8xl);
+  color: transparent;
+  -webkit-text-stroke: 3px var(--anime-dark);
+  text-shadow: 4px 4px 0 var(--power-pink);
+  flex-shrink: 0;
+  transition: all var(--transition-elastic);
+  font-weight: var(--font-black);
+  animation: numberFloat 4s ease-in-out infinite;
+}
+
+@keyframes numberFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.vision-card:hover .vision-num {
+  transform: scale(1.15) rotate(-5deg);
+  text-shadow: 6px 6px 0 var(--cyber-yellow);
+}
+
+.vision-content {
+  flex: 1;
+}
+
+.vision-content h3 {
+  font-weight: var(--font-extrabold);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  font-size: var(--text-2xl);
+  color: var(--anime-dark);
+  letter-spacing: var(--tracking-wide);
+}
+
+.vision-card.highlight {
+  background: linear-gradient(135deg, var(--hero-blue) 0%, var(--hero-blue-dark) 100%);
+}
+
+.vision-card.highlight h3,
+.vision-card.highlight p {
+  color: var(--mecha-white);
+}
+
+.vision-card.highlight .vision-num {
+  color: transparent;
+  -webkit-text-stroke: 3px var(--cyber-yellow);
+  text-shadow: 4px 4px 0 var(--anime-dark);
+}

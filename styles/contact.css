@@ -1,0 +1,110 @@
+/* ============ CONTACT SECTION ============ */
+.contact-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.contact-card {
+  background: var(--mecha-white);
+  border: var(--border-width) solid var(--border-ink);
+  padding: 2rem;
+  position: relative;
+  transition: all var(--transition-smooth);
+  box-shadow: var(--hard-shadow-md);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.contact-card:hover {
+  transform: translate(-5px, -5px);
+}
+
+.contact-card a {
+  color: var(--hero-blue);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.contact-card a:hover {
+  color: var(--power-pink);
+  text-decoration: underline;
+}
+
+.contact-card input,
+.contact-card textarea {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: var(--mecha-white);
+  border: var(--border-width-thin) solid var(--anime-dark);
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  transition: all var(--transition-smooth);
+  border-radius: var(--radius-md);
+  color: var(--anime-dark);
+}
+
+.contact-card input:focus,
+.contact-card textarea:focus {
+  outline: none;
+  box-shadow: var(--hard-shadow-sm);
+  border-color: var(--hero-blue);
+  transform: translateY(-3px);
+}
+
+.contact-card textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.contact-card button {
+  width: 100%;
+  padding: 1.2rem;
+  background: var(--power-pink);
+  color: var(--mecha-white);
+  border: var(--border-width) solid var(--border-ink);
+  font-weight: var(--font-extrabold);
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  box-shadow: var(--hard-shadow);
+  transform: translate(-4px, -4px);
+  transition: all var(--transition-elastic);
+  font-size: var(--text-base);
+  letter-spacing: var(--tracking-wide);
+  font-family: var(--font-primary);
+}
+
+.contact-card button:hover {
+  transform: translate(0, 0);
+  box-shadow: var(--hard-shadow-hover);
+  background: var(--anime-dark);
+}
+
+.contact-card button:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.contact-info div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 30px;
+  gap: 15px;
+}
+
+.contact-info p a {
+  text-decoration: none;
+  color: #000000;
+}
+
+.contact-info p a:hover {
+  text-decoration: none;
+  color: #000000;
+}
