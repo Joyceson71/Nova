@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (!typedTextElement) return;
 
   const texts = [
-    'Welcome to Nova Nexus Hub',
+    'Welcome to Nova Nexus',
     'Empowering ECE Excellence',
     'Innovation Meets Engineering',
     'Building Tomorrow\'s Engineers'
