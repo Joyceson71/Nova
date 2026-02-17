@@ -518,6 +518,7 @@
     </div>
     <button class="login-btn" onclick="doLogin()">Sign In <i class="fas fa-arrow-right" style="margin-left:6px"></i></button>
     <p id="loginError"></p>
+    <p class="login-hint">Demo credentials: <code>admin</code> / <code>novanexus@2026</code></p>
   </div>
 </div>
 
@@ -1057,6 +1058,7 @@ function saveEvent() {
     if (idx>=0) evs[idx]=obj;
   } else { evs.push(obj); }
   DB.set('events', evs);
+  publishUpdate('events');
   closeModal('eventModal');
   renderEvents();
   addActivity(editId ? `Event "${name}" updated` : `New event "${name}" added`, 'blue');
@@ -1066,6 +1068,7 @@ function deleteEvent(id) {
   if (!confirm('Delete this event?')) return;
   const evs = DB.get('events').filter(e=>e.id!==id);
   DB.set('events', evs);
+  publishUpdate('events');
   renderEvents();
   toast('Event deleted.', 'error');
 }
@@ -1129,6 +1132,7 @@ function saveMember() {
   if (editId) { const idx=mems.findIndex(x=>x.id===editId); if(idx>=0) mems[idx]=obj; }
   else mems.push(obj);
   DB.set('members', mems);
+  publishUpdate('members');
   closeModal('memberModal');
   // reset modal for next use
   document.getElementById('memberEditId').value='';
@@ -1140,6 +1144,7 @@ function saveMember() {
 function deleteMember(id) {
   if (!confirm('Remove this member?')) return;
   DB.set('members', DB.get('members').filter(m=>m.id!==id));
+  publishUpdate('members');
   renderMembers();
   toast('Member removed.','error');
 }
@@ -1171,6 +1176,7 @@ function saveGallery() {
   const items = DB.get('gallery');
   items.push({ id:Date.now(), caption, url:document.getElementById('galUrl').value.trim() });
   DB.set('gallery', items);
+  publishUpdate('gallery');
   closeModal('galleryModal');
   document.getElementById('galCaption').value='';
   document.getElementById('galUrl').value='';
@@ -1181,6 +1187,7 @@ function saveGallery() {
 function deleteGallery(id) {
   if (!confirm('Remove this photo?')) return;
   DB.set('gallery', DB.get('gallery').filter(g=>g.id!==id));
+  publishUpdate('gallery');
   renderGallery();
   toast('Photo removed.','error');
 }
@@ -1323,8 +1330,15 @@ function toast(msg, type='success') {
 }
 
 /* ═══════════════════════════════════════════════
+   PUBLISH UPDATE → signals index.html to re-render
+═══════════════════════════════════════════════ */
+function publishUpdate(type) {
+  // Write a timestamp so the storage event fires even if data is same
+  localStorage.setItem('nn_update', JSON.stringify({ type, ts: Date.now() }));
+}
+
+/* ═══════════════════════════════════════════════
    INTEGRATION: listen for form submissions on main site
-   (If opened in same window via postMessage or shared storage)
 ═══════════════════════════════════════════════ */
 window.addEventListener('storage', e => {
   if (e.key === 'nn_messages') {
@@ -1344,7 +1358,6 @@ function setDate() {
     d.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
 }
 setDate();
-
 </script>
 </body>
 </html>

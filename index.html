@@ -131,48 +131,9 @@
   <section id="events" aria-labelledby="events-heading">
     <h1 id="events-heading">UPCOMING EVENTS</h1>
 
-    <div class="events-grid">
-      <article class="event-card reveal" data-aos="9000">
-        <span class="badge">Upcoming</span>
-        <h2>Nexora-2K26</h2>
-        <p>
-          This Event consists of three competitions in Paper Presentation, 
-          Project Expo and Line Follower.
-        </p>
-        <ul>
-          <li>Team Size: 2 Members</li>
-          <li>Mode: Offline</li>
-          <li>Entry Fee: ₹120 per head</li>
-          <li>Certificates for all</li>
-        </ul>
-        <a href="https://nexora2k26.vercel.app/" class="event-link" target="_blank">Learn More</a>
-      </article>
-
-      <article class="event-card reveal">
-        <span class="badge featured">Featured</span>
-        <h2>Techathon 2K26</h2>
-        <p>
-          A flagship hackathon encouraging innovation and real-world problem solving.
-        </p>
-        <ul>
-          <li>Team Size: 3–4 Members</li>
-          <li>Mode: Offline</li>
-          <li>Entry Fee: Free</li>
-          <li>Certificates for all</li>
-        </ul>
-        <a href="https://techathon2k26.vercel.app/" class="event-link" target="_blank">Learn More</a>
-      </article>
-
-      <article class="event-card reveal">
-        <h2>Expert Talk Series</h2>
-        <p>Industry experts sharing insights and trends in ECE domains.</p>
-        <ul>
-          <li>Format: Interactive Sessions</li>
-          <li>Mode: Hybrid</li>
-          <li>Entry Fee: Free</li>
-          <li>Open to all students</li>
-        </ul>
-      </article>
+    <!-- Dynamically rendered by admin sync -->
+    <div class="events-grid" id="nn-events-grid">
+      <!-- populated by nn-sync.js -->
     </div>
   </section>
 
@@ -181,43 +142,9 @@
     <h1 id="gallery-heading">GALLERY</h1>
 
     <div class="gallery-wrapper">
-      <div class="gallery-track">
-
-        <article class="gallery-card">
-          <img src="assets/photo-1.jpeg" alt="Techathon 2K26 event photo" loading="lazy">
-          <div class="gallery-overlay">
-            <h3>Techathon 2K26</h3>
-          </div>
-        </article>
-
-        <article class="gallery-card">
-          <img src="assets/photo-2.jpeg" alt="Nova Nexus Inauguration ceremony" loading="lazy">
-          <div class="gallery-overlay">
-            <h3>Nova Nexus Inauguration</h3>
-          </div>
-        </article>
-
-        <article class="gallery-card">
-          <img src="assets/photo-3.jpeg" alt="Nova Nexus team photo" loading="lazy">
-          <div class="gallery-overlay">
-            <h3>Nova Nexus</h3>
-          </div>
-        </article>
-
-        <article class="gallery-card">
-          <img src="assets/photo-4.jpeg" alt="Our team members" loading="lazy">
-          <div class="gallery-overlay">
-            <h3>Our Team</h3>
-          </div>
-        </article>
-
-        <article class="gallery-card">
-          <img src="assets/photo-5.jpeg" alt="Glimpse of Techathon activities" loading="lazy">
-          <div class="gallery-overlay">
-            <h3>Glimpse of Techathon</h3>
-          </div>
-        </article>
-
+      <!-- Dynamically rendered by admin sync -->
+      <div class="gallery-track" id="nn-gallery-track">
+        <!-- populated by nn-sync.js -->
       </div>
     </div>
   </section>
@@ -308,7 +235,7 @@
         <div>
           <p>
           <i class="fas fa-envelope" aria-hidden="false"></i> 
-          <a href="mailto:novanexus.ece@gmail.com">novanexus.ece@gmail.com</a>
+          <a href="/cdn-cgi/l/email-protection#e58b8a93848b809d9096cb808680a58288848c89cb868a88"><span class="__cf_email__" data-cfemail="026c6d74636c677a77712c67616742656f636b6e2c616d6f">[email&#160;protected]</span></a>
         </p>
         <p>
           <i class="fas fa-phone" aria-hidden="true"></i> 
@@ -376,14 +303,16 @@
     
     <div class="footer-bottom">
       <p>&copy; 2026 Nova Nexus Club. All Rights Reserved.</p>
-      <a href="admin.html" class="admin-link" aria-label="Admin">&cacute;</a>
+      <a href="admin.html" class="admin-link" aria-label="Admin">&#9679;</a>
     </div>
   </footer>
 
   <style>
     .admin-link {
+      position: absolute;
+      right: 24px;
       font-size: 8px;
-      color: white;
+      color: transparent;
       text-decoration: none;
       cursor: default;
       transition: color 0.3s;
@@ -404,7 +333,7 @@
   </button>
 
 
-  <script src="scripts/bg-geometric.js"></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="scripts/bg-geometric.js"></script>
   <script src="scripts/bg-css-alternative.js"></script>
   <script src="scripts/main.js"></script>
   <script src="scripts/gallery.js"></script>
@@ -412,35 +341,114 @@
   <script src="scripts/mobile.js"></script>
   <script src="scripts/forms.js"></script>
 
-
+  <!-- ── Nova Nexus Admin Sync ── -->
   <script>
-    (function () {
+  (function () {
+    'use strict';
+
+    function dbGet(k, def) {
+      try { return JSON.parse(localStorage.getItem('nn_' + k)) ?? def; }
+      catch (e) { return def; }
+    }
+    function esc(s) {
+      return String(s || '')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    /* ── EVENTS ── */
+    function renderEvents() {
+      var grid = document.getElementById('nn-events-grid');
+      if (!grid) return;
+      var events = dbGet('events', []);
+      var visible = events.filter(function(e){ return e.status !== 'Past'; });
+
+      if (!visible.length) {
+        grid.innerHTML = '<p style="color:var(--muted,#888);text-align:center;padding:40px;grid-column:1/-1">No upcoming events at the moment. Check back soon!</p>';
+        return;
+      }
+
+      grid.innerHTML = visible.map(function(ev) {
+        var badgeClass = ev.status === 'Featured' ? 'badge featured' : 'badge';
+        var linkHTML = ev.link
+          ? '<a href="' + esc(ev.link) + '" class="event-link" target="_blank" rel="noopener">Learn More</a>'
+          : '';
+        var listItems = [];
+        if (ev.team) listItems.push('Team Size: ' + esc(ev.team));
+        if (ev.mode) listItems.push('Mode: ' + esc(ev.mode));
+        if (ev.fee)  listItems.push('Entry Fee: ' + esc(ev.fee));
+        listItems.push('Certificates for all');
+
+        return '<article class="event-card reveal">'
+          + '<span class="' + badgeClass + '">' + esc(ev.status) + '</span>'
+          + '<h2>' + esc(ev.name) + '</h2>'
+          + (ev.desc ? '<p>' + esc(ev.desc) + '</p>' : '')
+          + '<ul>' + listItems.map(function(li){ return '<li>' + li + '</li>'; }).join('') + '</ul>'
+          + linkHTML
+          + '</article>';
+      }).join('');
+    }
+
+    /* ── GALLERY ── */
+    function renderGallery() {
+      var track = document.getElementById('nn-gallery-track');
+      if (!track) return;
+      var items = dbGet('gallery', []);
+
+      if (!items.length) {
+        track.innerHTML = '<p style="color:var(--muted,#888);text-align:center;padding:40px">No gallery photos yet.</p>';
+        return;
+      }
+
+      track.innerHTML = items.map(function(g) {
+        return g.url
+          ? '<article class="gallery-card"><img src="' + esc(g.url) + '" alt="' + esc(g.caption) + '" loading="lazy"><div class="gallery-overlay"><h3>' + esc(g.caption) + '</h3></div></article>'
+          : '<article class="gallery-card" style="display:flex;align-items:center;justify-content:center"><div class="gallery-overlay" style="opacity:1;position:relative"><h3>' + esc(g.caption) + '</h3></div></article>';
+      }).join('');
+    }
+
+    /* ── CONTACT FORM → admin inbox ── */
+    function wireContactForm() {
       var form = document.getElementById('contactForm');
       if (!form) return;
-
       form.addEventListener('submit', function () {
         var name    = (document.getElementById('name')    || {}).value || '';
         var email   = (document.getElementById('email')   || {}).value || '';
         var message = (document.getElementById('message') || {}).value || '';
-
         if (!name && !email && !message) return;
-
         try {
-          var msgs = JSON.parse(localStorage.getItem('nn_messages') || '[]');
-          msgs.unshift({
-            id:      Date.now(),
-            name:    name,
-            email:   email,
-            message: message,
-            read:    false,
-            time:    new Date().toLocaleString('en-IN')
-          });
+          var msgs = dbGet('messages', []);
+          msgs.unshift({ id: Date.now(), name: name, email: email, message: message, read: false, time: new Date().toLocaleString('en-IN') });
           localStorage.setItem('nn_messages', JSON.stringify(msgs));
-        } catch (e) { }
+        } catch (e) {}
       });
-    })();
-  </script>
+    }
 
+    /* ── LIVE SYNC: listen for admin changes in other tab ── */
+    window.addEventListener('storage', function (e) {
+      if (e.key === 'nn_update') {
+        try {
+          var upd = JSON.parse(e.newValue || '{}');
+          if (upd.type === 'events')  renderEvents();
+          if (upd.type === 'gallery') renderGallery();
+        } catch (err) {}
+      }
+    });
+
+    /* ── INIT ── */
+    function init() {
+      renderEvents();
+      renderGallery();
+      wireContactForm();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+  </script>
 
 </body>
 </html>
