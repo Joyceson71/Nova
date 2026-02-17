@@ -10,11 +10,11 @@ form.addEventListener("submit", function (e) {
     submitButton.innerText = "Sending...";
 
     const formData = new FormData();
-    formData.append("entry.631935153", document.getElementById("name").value);
-    formData.append("entry.1105716581", document.getElementById("email").value);
-    formData.append("entry.1564504641", document.getElementById("message").value);
+    formData.append("entry.1446339706", document.getElementById("name").value);
+    formData.append("entry.717147309", document.getElementById("email").value);
+    formData.append("entry.1147416863", document.getElementById("message").value);
 
-    fetch("https://docs.google.com/forms/d/e/1FAIpQLSdNFSCaSn0BcRc6RtIPilus5_j04soYivcwyUxg81g3-VKPOQ/formResponse", {
+    fetch("https://docs.google.com/forms/d/e/1FAIpQLSd_mM9hxMy2uTKpQNRi4mHURk34Vsf5NX0DL9ciwwedXlb6sg/formResponse", {
         method: "POST",
         mode: "no-cors",
         body: formData
@@ -33,3 +33,4 @@ form.addEventListener("submit", function (e) {
         submitButton.innerText = "Send Message";
     });
 });
+
