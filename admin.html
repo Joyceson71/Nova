@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Nexus | Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
+
+    /* ── TOKENS ── */
+    :root {
+      --bg:       #080c14;
+      --surface:  #0d1422;
+      --card:     #111927;
+      --border:   #1e2d42;
+      --border2:  #243348;
+      --accent:   #00d4ff;
+      --accent2:  #7b5fff;
+      --green:    #00e5a0;
+      --red:      #ff4d6d;
+      --yellow:   #ffd166;
+      --text:     #e2ecf5;
+      --muted:    #5b7a9a;
+      --font:     'Syne', sans-serif;
+      --mono:     'DM Mono', monospace;
+      --r:        10px;
+      --sidebar:  260px;
+    }
+
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--font); }
+    input, textarea, select {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 10px 14px;
+      width: 100%;
+      outline: none;
+      transition: border .2s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+
+    /* ═══════════════════ LOGIN ═══════════════════ */
+    #loginScreen {
+      position: fixed; inset: 0; z-index: 999;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .login-wrap {
+      width: 420px;
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 18px;
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .login-wrap::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(0,212,255,.12), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .login-wrap::after {
+      content: '';
+      position: absolute; bottom: -60px; left: -60px;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(123,95,255,.1), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .login-logo {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 32px;
+    }
+    .login-logo .icon-wrap {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: #fff;
+    }
+    .login-logo h2 {
+      font-size: 18px; font-weight: 700; letter-spacing: .05em;
+      line-height: 1.2;
+    }
+    .login-logo span { font-size: 11px; color: var(--muted); display: block; }
+    .login-wrap h1 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+    .login-wrap p { color: var(--muted); font-size: 13.5px; margin-bottom: 28px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 7px; }
+    .form-group input { font-size: 14px; }
+    .login-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; font-weight: 700; font-size: 15px;
+      border: none; border-radius: var(--r);
+      margin-top: 6px;
+      transition: opacity .2s, transform .1s;
+    }
+    .login-btn:hover { opacity: .9; }
+    .login-btn:active { transform: scale(.98); }
+    #loginError { color: var(--red); font-size: 13px; margin-top: 12px; min-height: 18px; }
+    .login-hint { font-size: 12px; color: var(--muted); margin-top: 20px; text-align: center; }
+    .login-hint code { color: var(--accent); font-family: var(--mono); }
+
+    /* ═══════════════════ LAYOUT ═══════════════════ */
+    #app { display: none; min-height: 100vh; }
+    #app.visible { display: flex; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; bottom: 0;
+      z-index: 100;
+      transition: transform .3s;
+    }
+    .sidebar-logo {
+      padding: 24px 22px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .sidebar-logo .nn-mark {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: #fff; font-weight: 800;
+      flex-shrink: 0;
+    }
+    .sidebar-logo h3 { font-size: 14.5px; font-weight: 700; line-height: 1.25; }
+    .sidebar-logo small { font-size: 10.5px; color: var(--muted); }
+
+    .sidebar-nav { flex: 1; padding: 18px 12px; overflow-y: auto; }
+    .nav-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; padding: 6px 10px 10px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 11px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      font-size: 13.5px; font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background .15s, color .15s;
+      margin-bottom: 2px;
+      border: none; background: none; width: 100%; text-align: left;
+    }
+    .nav-item i { width: 18px; text-align: center; font-size: 14px; }
+    .nav-item:hover { background: var(--border); color: var(--text); }
+    .nav-item.active { background: rgba(0,212,255,.1); color: var(--accent); }
+    .nav-item .badge-pill {
+      margin-left: auto; font-size: 10px; font-weight: 700;
+      background: var(--accent); color: var(--bg);
+      border-radius: 20px; padding: 2px 7px;
+    }
+
+    .sidebar-footer {
+      padding: 16px 14px;
+      border-top: 1px solid var(--border);
+    }
+    .admin-profile {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .admin-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 13px; color: #fff; flex-shrink: 0;
+    }
+    .admin-info h4 { font-size: 13px; font-weight: 600; }
+    .admin-info small { font-size: 11px; color: var(--muted); }
+    .logout-btn {
+      margin-left: auto; border: none; background: none;
+      color: var(--muted); font-size: 16px; transition: color .2s;
+    }
+    .logout-btn:hover { color: var(--red); }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: var(--sidebar);
+      flex: 1; display: flex; flex-direction: column;
+      min-height: 100vh;
+    }
+    .topbar {
+      position: sticky; top: 0; z-index: 90;
+      background: rgba(8,12,20,.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 28px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .topbar h2 { font-size: 20px; font-weight: 700; }
+    .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+    .topbar-badge {
+      font-size: 11px; font-family: var(--mono);
+      color: var(--green); background: rgba(0,229,160,.08);
+      border: 1px solid rgba(0,229,160,.25);
+      border-radius: 20px; padding: 3px 10px;
+    }
+    .hamburger {
+      display: none; border: none; background: none;
+      color: var(--text); font-size: 20px;
+    }
+
+    /* ── CONTENT AREA ── */
+    .content { padding: 28px; flex: 1; }
+
+    /* ═══════════════════ PANELS ═══════════════════ */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── STAT CARDS ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px; margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 22px 20px;
+      display: flex; align-items: flex-start; gap: 14px;
+      transition: border-color .2s, transform .2s;
+    }
+    .stat-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+    .stat-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .stat-icon.blue  { background: rgba(0,212,255,.12); color: var(--accent); }
+    .stat-icon.purple{ background: rgba(123,95,255,.12); color: var(--accent2); }
+    .stat-icon.green { background: rgba(0,229,160,.12); color: var(--green); }
+    .stat-icon.red   { background: rgba(255,77,109,.12); color: var(--red); }
+    .stat-icon.yellow{ background: rgba(255,209,102,.12); color: var(--yellow); }
+    .stat-data h3 { font-size: 26px; font-weight: 800; line-height: 1; margin-bottom: 4px; font-family: var(--mono); }
+    .stat-data p { font-size: 12.5px; color: var(--muted); }
+    .stat-data .trend { font-size: 11px; margin-top: 4px; }
+    .trend.up { color: var(--green); }
+    .trend.down { color: var(--red); }
+
+    /* ── SECTION HEADER ── */
+    .sec-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 18px;
+    }
+    .sec-header h3 { font-size: 17px; font-weight: 700; }
+    .sec-header .line { flex: 1; height: 1px; background: var(--border); }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+    .table-toolbar {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .table-toolbar input {
+      max-width: 260px; font-size: 13px; padding: 8px 12px;
+    }
+    .table-toolbar .ml-auto { margin-left: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      text-align: left; padding: 12px 16px;
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .06em;
+      background: rgba(255,255,255,.02);
+      border-bottom: 1px solid var(--border);
+    }
+    tbody tr { transition: background .15s; }
+    tbody tr:hover { background: rgba(255,255,255,.02); }
+    tbody td {
+      padding: 13px 16px;
+      font-size: 13.5px;
+      border-bottom: 1px solid rgba(255,255,255,.03);
+      vertical-align: middle;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+
+    /* ── BADGE ── */
+    .tag {
+      display: inline-block;
+      font-size: 11px; font-weight: 600;
+      border-radius: 20px; padding: 3px 10px;
+    }
+    .tag-upcoming { background: rgba(0,212,255,.12); color: var(--accent); }
+    .tag-featured  { background: rgba(123,95,255,.12); color: var(--accent2); }
+    .tag-past      { background: rgba(91,122,154,.12); color: var(--muted); }
+    .tag-new       { background: rgba(0,229,160,.12);  color: var(--green); }
+    .tag-unread    { background: rgba(255,209,102,.12); color: var(--yellow); }
+    .tag-read      { background: rgba(91,122,154,.12); color: var(--muted); }
+    .tag-active    { background: rgba(0,229,160,.12);  color: var(--green); }
+    .tag-inactive  { background: rgba(255,77,109,.12); color: var(--red); }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 16px; border-radius: 8px;
+      font-size: 13px; font-weight: 600;
+      border: none; transition: opacity .2s, transform .1s;
+    }
+    .btn:hover { opacity: .88; }
+    .btn:active { transform: scale(.97); }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
+    .btn-danger  { background: rgba(255,77,109,.15); color: var(--red); border: 1px solid rgba(255,77,109,.3); }
+    .btn-ghost   { background: transparent; color: var(--muted); border: 1px solid var(--border2); }
+    .btn-sm { padding: 6px 11px; font-size: 12px; }
+    .btn-icon { padding: 7px; border-radius: 7px; background: var(--border); color: var(--text); border: none; }
+    .btn-icon:hover { background: var(--border2); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(8,12,20,.8);
+      backdrop-filter: blur(6px);
+      z-index: 500;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 16px;
+      width: 520px; max-width: 95vw;
+      padding: 32px;
+      position: relative;
+      animation: modalIn .25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(.96) translateY(12px); }
+      to   { opacity: 1; transform: scale(1)  translateY(0);     }
+    }
+    .modal-close {
+      position: absolute; top: 18px; right: 18px;
+      border: none; background: var(--border);
+      color: var(--muted); width: 30px; height: 30px;
+      border-radius: 50%; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-close:hover { background: var(--red); color: #fff; }
+    .modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field { margin-bottom: 14px; }
+    .field label { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: 6px; }
+    .field textarea { resize: vertical; min-height: 90px; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+    /* ── RECENT ACTIVITY ── */
+    .activity-feed {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 20px;
+    }
+    .activity-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,.03);
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .act-dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      margin-top: 5px; flex-shrink: 0;
+    }
+    .act-blue   { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+    .act-purple { background: var(--accent2); box-shadow: 0 0 8px var(--accent2); }
+    .act-green  { background: var(--green);  box-shadow: 0 0 8px var(--green); }
+    .act-yellow { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+    .act-red    { background: var(--red);    box-shadow: 0 0 8px var(--red); }
+    .act-text p { font-size: 13.5px; margin-bottom: 2px; }
+    .act-text small { font-size: 11.5px; color: var(--muted); font-family: var(--mono); }
+
+    /* ── OVERVIEW GRID ── */
+    .overview-grid {
+      display: grid; grid-template-columns: 1fr 360px; gap: 20px;
+    }
+
+    /* ── MESSAGE DETAIL ── */
+    .msg-preview {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 20px;
+      font-size: 13.5px; line-height: 1.7;
+    }
+    .msg-preview.empty { color: var(--muted); text-align: center; padding: 40px; }
+    .msg-meta { display: flex; gap: 20px; margin-bottom: 14px; flex-wrap: wrap; }
+    .msg-meta span { font-size: 12px; color: var(--muted); }
+    .msg-meta span strong { color: var(--text); }
+    .msg-body { color: var(--text); }
+
+    /* ── GALLERY GRID ── */
+    .gallery-admin-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+    .gallery-item-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); overflow: hidden;
+      transition: border-color .2s, transform .2s;
+    }
+    .gallery-item-card:hover { border-color: var(--border2); transform: translateY(-3px); }
+    .gallery-thumb {
+      width: 100%; aspect-ratio: 4/3; object-fit: cover;
+      display: block;
+    }
+    .gallery-thumb-placeholder {
+      width: 100%; aspect-ratio: 4/3;
+      background: linear-gradient(135deg, var(--border), var(--border2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px; color: var(--muted);
+    }
+    .gallery-card-footer {
+      padding: 10px 12px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .gallery-card-footer span { font-size: 12.5px; font-weight: 500; }
+    .gallery-card-footer .actions { display: flex; gap: 5px; }
+
+    /* ── NOTIFICATIONS ── */
+    .notif-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--red); position: absolute; top: 2px; right: 2px;
+    }
+    .notif-wrap { position: relative; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center; padding: 60px 20px; color: var(--muted);
+    }
+    .empty-state i { font-size: 40px; margin-bottom: 14px; opacity: .4; }
+    .empty-state p { font-size: 14px; }
+
+    /* ── TOAST ── */
+    .toast-container {
+      position: fixed; bottom: 24px; right: 24px;
+      z-index: 9999; display: flex; flex-direction: column; gap: 10px;
+    }
+    .toast {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-left: 3px solid var(--green);
+      border-radius: 10px;
+      padding: 13px 18px;
+      font-size: 13.5px; min-width: 260px;
+      animation: toastIn .3s ease;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .toast.error { border-left-color: var(--red); }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ── QUICK OVERVIEW CHART BAR ── */
+    .bar-chart { margin-top: 6px; }
+    .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .bar-row span { font-size: 12px; color: var(--muted); width: 90px; flex-shrink: 0; }
+    .bar-bg { flex: 1; height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 99px; }
+    .bar-row small { font-size: 11px; font-family: var(--mono); color: var(--text); width: 28px; text-align: right; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); box-shadow: 0 0 40px rgba(0,0,0,.5); }
+      .main { margin-left: 0; }
+      .hamburger { display: block; }
+      .overview-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .content { padding: 16px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ LOGIN ═══════════════════ -->
+<div id="loginScreen">
+  <div class="login-wrap">
+    <div class="login-logo">
+      <div class="icon-wrap"><i class="fas fa-microchip"></i></div>
+      <div>
+        <h2>Nova Nexus</h2>
+        <span>Admin Portal — ECE Dept.</span>
+      </div>
+    </div>
+    <h1>Welcome back</h1>
+    <p>Sign in to access the admin dashboard</p>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="admin" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In <i class="fas fa-arrow-right" style="margin-left:6px"></i></button>
+    <p id="loginError"></p>
+  </div>
+</div>
+
+<!-- ═══════════════════ APP ═══════════════════ -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="nn-mark">NN</div>
+      <div>
+        <h3>Nova Nexus</h3>
+        <small>Admin Dashboard</small>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main</div>
+      <button class="nav-item active" onclick="showPanel('overview', this)">
+        <i class="fas fa-chart-pie"></i> Overview
+      </button>
+      <button class="nav-item" onclick="showPanel('events', this)">
+        <i class="fas fa-calendar-alt"></i> Events
+        <span class="badge-pill" id="eventsBadge">3</span>
+      </button>
+      <button class="nav-item" onclick="showPanel('members', this)">
+        <i class="fas fa-users"></i> Members
+      </button>
+      <div class="nav-label" style="margin-top:10px">Content</div>
+      <button class="nav-item" onclick="showPanel('gallery', this)">
+        <i class="fas fa-images"></i> Gallery
+      </button>
+      <button class="nav-item" onclick="showPanel('messages', this)">
+        <i class="fas fa-envelope"></i> Messages
+        <span class="badge-pill" id="msgBadge">0</span>
+      </button>
+      <div class="nav-label" style="margin-top:10px">System</div>
+      <button class="nav-item" onclick="showPanel('settings', this)">
+        <i class="fas fa-cog"></i> Settings
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="admin-profile">
+        <div class="admin-avatar">AD</div>
+        <div class="admin-info">
+          <h4>Admin</h4>
+          <small>novanexus.ece</small>
+        </div>
+        <button class="logout-btn" onclick="doLogout()" title="Logout">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <h2 id="topbarTitle">Overview</h2>
+      <div class="topbar-right">
+        <span class="topbar-badge" id="topbarDate"></span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ══════════ OVERVIEW ══════════ -->
+      <div class="panel active" id="panel-overview">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon blue"><i class="fas fa-calendar-check"></i></div>
+            <div class="stat-data">
+              <h3 id="stat-events">3</h3>
+              <p>Total Events</p>
+              <div class="trend up"><i class="fas fa-arrow-up"></i> 2 upcoming</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon purple"><i class="fas fa-users"></i></div>
+            <div class="stat-data">
+              <h3 id="stat-members">0</h3>
+              <p>Members</p>
+              <div class="trend up" id="stat-members-trend"><i class="fas fa-arrow-up"></i> 0 active</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green"><i class="fas fa-images"></i></div>
+            <div class="stat-data">
+              <h3 id="stat-gallery">5</h3>
+              <p>Gallery Items</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon yellow"><i class="fas fa-envelope"></i></div>
+            <div class="stat-data">
+              <h3 id="stat-msgs">0</h3>
+              <p>Messages</p>
+              <div class="trend up" id="stat-msgs-unread"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="overview-grid">
+          <div>
+            <div class="sec-header"><h3>Recent Activity</h3><div class="line"></div></div>
+            <div class="activity-feed" id="activityFeed">
+              <div class="activity-item">
+                <div class="act-dot act-blue"></div>
+                <div class="act-text"><p>Nexora-2K26 event registered</p><small>Just now</small></div>
+              </div>
+              <div class="activity-item">
+                <div class="act-dot act-purple"></div>
+                <div class="act-text"><p>Techathon 2K26 event added</p><small>2 minutes ago</small></div>
+              </div>
+              <div class="activity-item">
+                <div class="act-dot act-green"></div>
+                <div class="act-text"><p>Gallery updated with 5 photos</p><small>1 hour ago</small></div>
+              </div>
+              <div class="activity-item">
+                <div class="act-dot act-yellow"></div>
+                <div class="act-text"><p>Admin dashboard initialized</p><small>Today</small></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="sec-header"><h3>Events Breakdown</h3><div class="line"></div></div>
+            <div class="activity-feed">
+              <div class="bar-chart" id="eventBreakdownChart">
+                <div class="bar-row">
+                  <span>Upcoming</span>
+                  <div class="bar-bg"><div class="bar-fill" style="width:80%;background:var(--accent)"></div></div>
+                  <small>2</small>
+                </div>
+                <div class="bar-row">
+                  <span>Featured</span>
+                  <div class="bar-bg"><div class="bar-fill" style="width:40%;background:var(--accent2)"></div></div>
+                  <small>1</small>
+                </div>
+                <div class="bar-row">
+                  <span>Past</span>
+                  <div class="bar-bg"><div class="bar-fill" style="width:20%;background:var(--muted)"></div></div>
+                  <small>0</small>
+                </div>
+              </div>
+              <div style="margin-top:20px">
+                <div class="sec-header"><h3>Quick Actions</h3></div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <button class="btn btn-primary" onclick="openModal('eventModal')"><i class="fas fa-plus"></i> Add New Event</button>
+                  <button class="btn btn-ghost" onclick="showPanel('members', document.querySelector('.nav-item:nth-child(3)'))"><i class="fas fa-user-plus"></i> Add Member</button>
+                  <button class="btn btn-ghost" onclick="showPanel('messages', document.querySelector('.nav-item:nth-child(5)'))"><i class="fas fa-envelope-open"></i> View Messages</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ EVENTS ══════════ -->
+      <div class="panel" id="panel-events">
+        <div class="table-wrap">
+          <div class="table-toolbar">
+            <input type="text" placeholder="Search events…" oninput="filterTable('eventsTable', this.value)">
+            <div class="ml-auto">
+              <button class="btn btn-primary" onclick="openModal('eventModal')">
+                <i class="fas fa-plus"></i> Add Event
+              </button>
+            </div>
+          </div>
+          <table id="eventsTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Event Name</th>
+                <th>Date</th>
+                <th>Mode</th>
+                <th>Fee</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="eventsTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══════════ MEMBERS ══════════ -->
+      <div class="panel" id="panel-members">
+        <div class="table-wrap">
+          <div class="table-toolbar">
+            <input type="text" placeholder="Search members…" oninput="filterTable('membersTable', this.value)">
+            <div class="ml-auto">
+              <button class="btn btn-primary" onclick="openModal('memberModal')">
+                <i class="fas fa-user-plus"></i> Add Member
+              </button>
+            </div>
+          </div>
+          <table id="membersTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Roll No</th>
+                <th>Year</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="membersTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══════════ GALLERY ══════════ -->
+      <div class="panel" id="panel-gallery">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <span style="color:var(--muted);font-size:13px" id="galleryCount">5 items</span>
+          <button class="btn btn-primary" onclick="openModal('galleryModal')">
+            <i class="fas fa-plus"></i> Add Photo
+          </button>
+        </div>
+        <div class="gallery-admin-grid" id="galleryGrid"></div>
+      </div>
+
+      <!-- ══════════ MESSAGES ══════════ -->
+      <div class="panel" id="panel-messages">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div>
+            <div class="table-wrap">
+              <div class="table-toolbar" style="justify-content:space-between">
+                <span style="font-size:13px;font-weight:600">Inbox</span>
+                <button class="btn btn-ghost btn-sm" onclick="clearMessages()"><i class="fas fa-trash"></i> Clear All</button>
+              </div>
+              <div id="messageList" style="max-height:500px;overflow-y:auto"></div>
+            </div>
+          </div>
+          <div>
+            <div class="sec-header"><h3>Message Detail</h3><div class="line"></div></div>
+            <div class="msg-preview empty" id="msgPreview">
+              <i class="fas fa-envelope-open"></i>
+              <p>Select a message to preview</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ SETTINGS ══════════ -->
+      <div class="panel" id="panel-settings">
+        <div style="max-width:500px">
+          <div class="sec-header"><h3>Change Password</h3><div class="line"></div></div>
+          <div class="activity-feed" style="padding:24px">
+            <div class="field">
+              <label>Current Password</label>
+              <input type="password" id="curPass" placeholder="Current password">
+            </div>
+            <div class="field">
+              <label>New Password</label>
+              <input type="password" id="newPass" placeholder="New password">
+            </div>
+            <div class="field">
+              <label>Confirm New Password</label>
+              <input type="password" id="cfmPass" placeholder="Confirm password">
+            </div>
+            <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+          </div>
+
+          <div class="sec-header" style="margin-top:28px"><h3>Club Info</h3><div class="line"></div></div>
+          <div class="activity-feed" style="padding:24px">
+            <div class="field">
+              <label>Club Email</label>
+              <input type="email" value="novanexus.ece@gmail.com">
+            </div>
+            <div class="field">
+              <label>Contact Phone</label>
+              <input type="text" value="+91 99436 48032">
+            </div>
+            <div class="field">
+              <label>Location</label>
+              <input type="text" value="Kings Engineering College, Sriperumbudur">
+            </div>
+            <button class="btn btn-primary" onclick="toast('Club info saved!')">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div><!-- /app -->
+
+<!-- ═══════════════════ MODALS ═══════════════════ -->
+
+<!-- EVENT MODAL -->
+<div class="modal-overlay" id="eventModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('eventModal')"><i class="fas fa-times"></i></button>
+    <h3 id="eventModalTitle">Add New Event</h3>
+    <input type="hidden" id="eventEditId">
+    <div class="form-row">
+      <div class="field"><label>Event Name</label><input type="text" id="evName" placeholder="e.g. Nexora-2K26"></div>
+      <div class="field"><label>Date</label><input type="date" id="evDate"></div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Mode</label>
+        <select id="evMode">
+          <option value="Offline">Offline</option>
+          <option value="Online">Online</option>
+          <option value="Hybrid">Hybrid</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="evStatus">
+          <option value="Upcoming">Upcoming</option>
+          <option value="Featured">Featured</option>
+          <option value="Past">Past</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Entry Fee (₹)</label><input type="text" id="evFee" placeholder="e.g. Free or ₹120"></div>
+      <div class="field"><label>Team Size</label><input type="text" id="evTeam" placeholder="e.g. 2–4 Members"></div>
+    </div>
+    <div class="field"><label>Description</label><textarea id="evDesc" placeholder="Short description…"></textarea></div>
+    <div class="field"><label>Registration Link</label><input type="url" id="evLink" placeholder="https://…"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('eventModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEvent()">Save Event</button>
+    </div>
+  </div>
+</div>
+
+<!-- MEMBER MODAL -->
+<div class="modal-overlay" id="memberModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('memberModal')"><i class="fas fa-times"></i></button>
+    <h3 id="memberModalTitle">Add New Member</h3>
+    <input type="hidden" id="memberEditId">
+    <div class="form-row">
+      <div class="field"><label>Full Name</label><input type="text" id="memName" placeholder="Student name"></div>
+      <div class="field"><label>Roll Number</label><input type="text" id="memRoll" placeholder="e.g. 22ECE001"></div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Year</label>
+        <select id="memYear">
+          <option>I Year</option><option>II Year</option><option>III Year</option><option>IV Year</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Role</label>
+        <select id="memRole">
+          <option>Member</option><option>Core Team</option><option>Secretary</option><option>President</option><option>Vice President</option><option>Treasurer</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Email</label><input type="email" id="memEmail" placeholder="student@email.com"></div>
+      <div class="field"><label>Phone</label><input type="tel" id="memPhone" placeholder="+91 XXXXX XXXXX"></div>
+    </div>
+    <div class="field">
+      <label>Status</label>
+      <select id="memStatus">
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('memberModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMember()">Save Member</button>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY MODAL -->
+<div class="modal-overlay" id="galleryModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('galleryModal')"><i class="fas fa-times"></i></button>
+    <h3>Add Gallery Photo</h3>
+    <div class="field"><label>Caption</label><input type="text" id="galCaption" placeholder="e.g. Techathon 2K26"></div>
+    <div class="field"><label>Image URL (or leave blank for placeholder)</label><input type="url" id="galUrl" placeholder="https://…"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('galleryModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveGallery()">Add Photo</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   DATA STORE  (localStorage persistence)
+═══════════════════════════════════════════════ */
+const DB = {
+  get(k, def=[]) { try { return JSON.parse(localStorage.getItem('nn_'+k)) ?? def; } catch { return def; } },
+  set(k, v) { localStorage.setItem('nn_'+k, JSON.stringify(v)); }
+};
+
+/* ─── Seed defaults once ─── */
+if (!localStorage.getItem('nn_seeded')) {
+  DB.set('events', [
+    { id:1, name:'Nexora-2K26', date:'2026-03-15', mode:'Offline', fee:'₹120/head', team:'2 Members', status:'Upcoming', desc:'Paper Presentation, Project Expo & Line Follower.', link:'https://nexora2k26.vercel.app/' },
+    { id:2, name:'Techathon 2K26', date:'2026-04-05', mode:'Offline', fee:'Free', team:'3–4 Members', status:'Featured', desc:'Flagship hackathon for innovation and real-world problem solving.', link:'https://techathon2k26.vercel.app/' },
+    { id:3, name:'Expert Talk Series', date:'2026-02-28', mode:'Hybrid', fee:'Free', team:'Individual', status:'Upcoming', desc:'Industry experts sharing insights and trends in ECE domains.', link:'' }
+  ]);
+  DB.set('members', []);
+  DB.set('gallery', [
+    { id:1, caption:'Techathon 2K26', url:'assets/photo-1.jpeg' },
+    { id:2, caption:'Nova Nexus Inauguration', url:'assets/photo-2.jpeg' },
+    { id:3, caption:'Nova Nexus', url:'assets/photo-3.jpeg' },
+    { id:4, caption:'Our Team', url:'assets/photo-4.jpeg' },
+    { id:5, caption:'Glimpse of Techathon', url:'assets/photo-5.jpeg' }
+  ]);
+  DB.set('messages', []);
+  DB.set('password', 'novanexus@2026');
+  localStorage.setItem('nn_seeded','1');
+}
+
+/* ═══════════════════════════════════════════════
+   AUTH
+═══════════════════════════════════════════════ */
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginError');
+  if (u === 'admin' && p === DB.get('password','novanexus@2026')) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    toast('Welcome back, Admin!');
+    refreshAll();
+  } else {
+    err.textContent = 'Invalid username or password.';
+  }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') doLogin();
+});
+function doLogout() {
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').textContent = '';
+}
+
+/* ═══════════════════════════════════════════════
+   NAV & PANELS
+═══════════════════════════════════════════════ */
+const titles = { overview:'Overview', events:'Events', members:'Members', gallery:'Gallery', messages:'Messages', settings:'Settings' };
+function showPanel(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  document.getElementById('topbarTitle').textContent = titles[id] || id;
+  if (id === 'events')   renderEvents();
+  if (id === 'members')  renderMembers();
+  if (id === 'gallery')  renderGallery();
+  if (id === 'messages') renderMessages();
+  closeSidebarMobile();
+}
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+function closeSidebarMobile() {
+  if (window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
+}
+
+/* ═══════════════════════════════════════════════
+   EVENTS
+═══════════════════════════════════════════════ */
+function renderEvents() {
+  const evs = DB.get('events');
+  const tbody = document.getElementById('eventsTbody');
+  if (!evs.length) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><i class="fas fa-calendar-times"></i><p>No events yet</p></div></td></tr>'; return; }
+  tbody.innerHTML = evs.map((e,i) => `
+    <tr>
+      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${String(i+1).padStart(2,'0')}</td>
+      <td><strong>${e.name}</strong>${e.link ? ` <a href="${e.link}" target="_blank" style="color:var(--accent);font-size:11px;margin-left:5px"><i class="fas fa-external-link-alt"></i></a>` : ''}</td>
+      <td style="font-family:var(--mono);font-size:12.5px">${e.date||'TBD'}</td>
+      <td>${e.mode}</td>
+      <td>${e.fee}</td>
+      <td><span class="tag tag-${e.status.toLowerCase()}">${e.status}</span></td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn-icon" onclick="editEvent(${e.id})" title="Edit"><i class="fas fa-pen" style="font-size:11px"></i></button>
+          <button class="btn-icon" style="color:var(--red)" onclick="deleteEvent(${e.id})" title="Delete"><i class="fas fa-trash" style="font-size:11px"></i></button>
+        </div>
+      </td>
+    </tr>`).join('');
+  updateStats();
+}
+function openEventModal(clear=true) {
+  if (clear) {
+    document.getElementById('eventEditId').value = '';
+    document.getElementById('eventModalTitle').textContent = 'Add New Event';
+    ['evName','evDate','evFee','evTeam','evDesc','evLink'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('evMode').value='Offline';
+    document.getElementById('evStatus').value='Upcoming';
+  }
+  openModal('eventModal');
+}
+function editEvent(id) {
+  const ev = DB.get('events').find(e=>e.id===id); if(!ev) return;
+  document.getElementById('eventEditId').value = id;
+  document.getElementById('eventModalTitle').textContent = 'Edit Event';
+  document.getElementById('evName').value  = ev.name;
+  document.getElementById('evDate').value  = ev.date;
+  document.getElementById('evMode').value  = ev.mode;
+  document.getElementById('evStatus').value= ev.status;
+  document.getElementById('evFee').value   = ev.fee;
+  document.getElementById('evTeam').value  = ev.team;
+  document.getElementById('evDesc').value  = ev.desc;
+  document.getElementById('evLink').value  = ev.link;
+  openModal('eventModal');
+}
+function saveEvent() {
+  const name = document.getElementById('evName').value.trim();
+  if (!name) { toast('Event name required','error'); return; }
+  const evs = DB.get('events');
+  const editId = +document.getElementById('eventEditId').value;
+  const obj = {
+    id: editId || Date.now(),
+    name, date:document.getElementById('evDate').value,
+    mode:document.getElementById('evMode').value,
+    status:document.getElementById('evStatus').value,
+    fee:document.getElementById('evFee').value,
+    team:document.getElementById('evTeam').value,
+    desc:document.getElementById('evDesc').value,
+    link:document.getElementById('evLink').value
+  };
+  if (editId) {
+    const idx = evs.findIndex(e=>e.id===editId);
+    if (idx>=0) evs[idx]=obj;
+  } else { evs.push(obj); }
+  DB.set('events', evs);
+  closeModal('eventModal');
+  renderEvents();
+  addActivity(editId ? `Event "${name}" updated` : `New event "${name}" added`, 'blue');
+  toast(editId ? 'Event updated!' : 'Event added!');
+}
+function deleteEvent(id) {
+  if (!confirm('Delete this event?')) return;
+  const evs = DB.get('events').filter(e=>e.id!==id);
+  DB.set('events', evs);
+  renderEvents();
+  toast('Event deleted.', 'error');
+}
+
+/* ═══════════════════════════════════════════════
+   MEMBERS
+═══════════════════════════════════════════════ */
+function renderMembers() {
+  const mems = DB.get('members');
+  const tbody = document.getElementById('membersTbody');
+  if (!mems.length) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><i class="fas fa-user-slash"></i><p>No members yet. Add your first member!</p></div></td></tr>'; updateStats(); return; }
+  tbody.innerHTML = mems.map((m,i) => `
+    <tr>
+      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${String(i+1).padStart(2,'0')}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0">${m.name.charAt(0).toUpperCase()}</div>
+          <div><strong>${m.name}</strong><br><small style="color:var(--muted);font-size:11px">${m.email||''}</small></div>
+        </div>
+      </td>
+      <td style="font-family:var(--mono);font-size:12.5px">${m.roll}</td>
+      <td>${m.year}</td>
+      <td><span class="tag ${m.role==='Core Team'?'tag-featured':m.role==='President'?'tag-upcoming':'tag-read'}">${m.role}</span></td>
+      <td><span class="tag tag-${m.status.toLowerCase()}">${m.status}</span></td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn-icon" onclick="editMember(${m.id})" title="Edit"><i class="fas fa-pen" style="font-size:11px"></i></button>
+          <button class="btn-icon" style="color:var(--red)" onclick="deleteMember(${m.id})" title="Delete"><i class="fas fa-trash" style="font-size:11px"></i></button>
+        </div>
+      </td>
+    </tr>`).join('');
+  updateStats();
+}
+function editMember(id) {
+  const m = DB.get('members').find(x=>x.id===id); if(!m) return;
+  document.getElementById('memberEditId').value = id;
+  document.getElementById('memberModalTitle').textContent = 'Edit Member';
+  document.getElementById('memName').value  = m.name;
+  document.getElementById('memRoll').value  = m.roll;
+  document.getElementById('memYear').value  = m.year;
+  document.getElementById('memRole').value  = m.role;
+  document.getElementById('memEmail').value = m.email||'';
+  document.getElementById('memPhone').value = m.phone||'';
+  document.getElementById('memStatus').value= m.status;
+  openModal('memberModal');
+}
+function saveMember() {
+  const name = document.getElementById('memName').value.trim();
+  if (!name) { toast('Name required','error'); return; }
+  const mems = DB.get('members');
+  const editId = +document.getElementById('memberEditId').value;
+  const obj = {
+    id: editId||Date.now(), name,
+    roll:document.getElementById('memRoll').value,
+    year:document.getElementById('memYear').value,
+    role:document.getElementById('memRole').value,
+    email:document.getElementById('memEmail').value,
+    phone:document.getElementById('memPhone').value,
+    status:document.getElementById('memStatus').value
+  };
+  if (editId) { const idx=mems.findIndex(x=>x.id===editId); if(idx>=0) mems[idx]=obj; }
+  else mems.push(obj);
+  DB.set('members', mems);
+  closeModal('memberModal');
+  // reset modal for next use
+  document.getElementById('memberEditId').value='';
+  document.getElementById('memberModalTitle').textContent='Add New Member';
+  renderMembers();
+  addActivity(editId?`Member "${name}" updated`:`New member "${name}" added`, 'purple');
+  toast(editId?'Member updated!':'Member added!');
+}
+function deleteMember(id) {
+  if (!confirm('Remove this member?')) return;
+  DB.set('members', DB.get('members').filter(m=>m.id!==id));
+  renderMembers();
+  toast('Member removed.','error');
+}
+
+/* ═══════════════════════════════════════════════
+   GALLERY
+═══════════════════════════════════════════════ */
+function renderGallery() {
+  const items = DB.get('gallery');
+  document.getElementById('galleryCount').textContent = `${items.length} item${items.length!==1?'s':''}`;
+  const grid = document.getElementById('galleryGrid');
+  if (!items.length) { grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-camera"></i><p>No gallery items yet</p></div>'; updateStats(); return; }
+  grid.innerHTML = items.map(g => `
+    <div class="gallery-item-card">
+      ${g.url ? `<img class="gallery-thumb" src="${g.url}" alt="${g.caption}" onerror="this.parentElement.querySelector('.gallery-thumb-placeholder') && this.style.display='none'">` : ''}
+      <div class="gallery-thumb-placeholder" style="${g.url?'display:none':''}"><i class="fas fa-image"></i></div>
+      <div class="gallery-card-footer">
+        <span>${g.caption}</span>
+        <div class="actions">
+          <button class="btn-icon" style="color:var(--red)" onclick="deleteGallery(${g.id})"><i class="fas fa-trash" style="font-size:10px"></i></button>
+        </div>
+      </div>
+    </div>`).join('');
+  updateStats();
+}
+function saveGallery() {
+  const caption = document.getElementById('galCaption').value.trim();
+  if (!caption) { toast('Caption required','error'); return; }
+  const items = DB.get('gallery');
+  items.push({ id:Date.now(), caption, url:document.getElementById('galUrl').value.trim() });
+  DB.set('gallery', items);
+  closeModal('galleryModal');
+  document.getElementById('galCaption').value='';
+  document.getElementById('galUrl').value='';
+  renderGallery();
+  addActivity(`Gallery photo "${caption}" added`, 'green');
+  toast('Photo added!');
+}
+function deleteGallery(id) {
+  if (!confirm('Remove this photo?')) return;
+  DB.set('gallery', DB.get('gallery').filter(g=>g.id!==id));
+  renderGallery();
+  toast('Photo removed.','error');
+}
+
+/* ═══════════════════════════════════════════════
+   MESSAGES
+═══════════════════════════════════════════════ */
+function renderMessages() {
+  const msgs = DB.get('messages');
+  const list = document.getElementById('messageList');
+  document.getElementById('msgBadge').textContent = msgs.filter(m=>!m.read).length || '';
+  if (!msgs.length) {
+    list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No messages yet</p></div>';
+    return;
+  }
+  list.innerHTML = msgs.map(m => `
+    <div onclick="previewMsg(${m.id})" style="padding:14px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;background:${m.read?'transparent':'rgba(0,212,255,.04)'}"
+      onmouseover="this.style.background='rgba(255,255,255,.03)'" onmouseout="this.style.background='${m.read?'transparent':'rgba(0,212,255,.04)'}'">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <strong style="font-size:13.5px">${m.name}</strong>
+        <span class="tag ${m.read?'tag-read':'tag-unread'}" style="font-size:10px">${m.read?'Read':'New'}</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:3px">${m.email}</div>
+      <div style="font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px">${m.message}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;font-family:var(--mono)">${m.time}</div>
+    </div>`).join('');
+  updateStats();
+}
+function previewMsg(id) {
+  const msgs = DB.get('messages');
+  const msg = msgs.find(m=>m.id===id); if(!msg) return;
+  if (!msg.read) { msg.read=true; DB.set('messages', msgs); renderMessages(); }
+  document.getElementById('msgPreview').innerHTML = `
+    <div class="msg-meta">
+      <span><strong>From:</strong> ${msg.name}</span>
+      <span><strong>Email:</strong> <a href="mailto:${msg.email}" style="color:var(--accent)">${msg.email}</a></span>
+      <span style="font-family:var(--mono);font-size:11px">${msg.time}</span>
+    </div>
+    <div class="msg-body">${msg.message.replace(/\n/g,'<br>')}</div>
+    <div style="margin-top:16px;display:flex;gap:8px">
+      <a href="mailto:${msg.email}?subject=Re: Nova Nexus" class="btn btn-primary btn-sm"><i class="fas fa-reply"></i> Reply</a>
+      <button class="btn btn-danger btn-sm" onclick="deleteMsg(${id})"><i class="fas fa-trash"></i> Delete</button>
+    </div>`;
+  document.getElementById('msgPreview').classList.remove('empty');
+}
+function deleteMsg(id) {
+  DB.set('messages', DB.get('messages').filter(m=>m.id!==id));
+  renderMessages();
+  document.getElementById('msgPreview').innerHTML='<i class="fas fa-envelope-open"></i><p>Select a message to preview</p>';
+  document.getElementById('msgPreview').classList.add('empty');
+}
+function clearMessages() {
+  if (!confirm('Clear all messages?')) return;
+  DB.set('messages','');
+  DB.set('messages',[]);
+  renderMessages();
+  document.getElementById('msgPreview').innerHTML='<i class="fas fa-envelope-open"></i><p>Select a message to preview</p>';
+  document.getElementById('msgPreview').classList.add('empty');
+  toast('All messages cleared.');
+}
+
+/* ═══════════════════════════════════════════════
+   STATS UPDATE
+═══════════════════════════════════════════════ */
+function updateStats() {
+  const evs  = DB.get('events');
+  const mems = DB.get('members');
+  const gals = DB.get('gallery');
+  const msgs = DB.get('messages');
+  const unread= msgs.filter(m=>!m.read).length;
+
+  document.getElementById('stat-events').textContent  = evs.length;
+  document.getElementById('stat-members').textContent = mems.length;
+  document.getElementById('stat-gallery').textContent = gals.length;
+  document.getElementById('stat-msgs').textContent    = msgs.length;
+  document.getElementById('stat-members-trend').innerHTML = `<i class="fas fa-arrow-up"></i> ${mems.filter(m=>m.status==='Active').length} active`;
+  document.getElementById('stat-msgs-unread').innerHTML = unread ? `<i class="fas fa-circle" style="font-size:7px"></i> ${unread} unread` : '';
+  document.getElementById('eventsBadge').textContent = evs.filter(e=>e.status==='Upcoming'||e.status==='Featured').length || '';
+  document.getElementById('msgBadge').textContent    = unread || '';
+}
+function refreshAll() { updateStats(); }
+
+/* ═══════════════════════════════════════════════
+   ACTIVITY FEED
+═══════════════════════════════════════════════ */
+const actColors = ['act-blue','act-purple','act-green','act-yellow','act-red'];
+let actIdx = 0;
+function addActivity(text, color='blue') {
+  const feed = document.getElementById('activityFeed');
+  const div = document.createElement('div');
+  div.className = 'activity-item';
+  div.innerHTML = `<div class="act-dot act-${color}"></div><div class="act-text"><p>${text}</p><small>Just now</small></div>`;
+  feed.prepend(div);
+  if (feed.children.length > 8) feed.removeChild(feed.lastChild);
+}
+
+/* ═══════════════════════════════════════════════
+   SETTINGS – Change Password
+═══════════════════════════════════════════════ */
+function changePassword() {
+  const cur = document.getElementById('curPass').value;
+  const nw  = document.getElementById('newPass').value;
+  const cf  = document.getElementById('cfmPass').value;
+  if (cur !== DB.get('password','novanexus@2026')) { toast('Current password incorrect','error'); return; }
+  if (nw.length < 6)  { toast('Password must be 6+ characters','error'); return; }
+  if (nw !== cf)      { toast('Passwords do not match','error'); return; }
+  DB.set('password', nw);
+  document.getElementById('curPass').value=document.getElementById('newPass').value=document.getElementById('cfmPass').value='';
+  toast('Password updated successfully!');
+}
+
+/* ═══════════════════════════════════════════════
+   MODAL HELPERS
+═══════════════════════════════════════════════ */
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target===m) m.classList.remove('open'); });
+});
+
+/* ═══════════════════════════════════════════════
+   TABLE FILTER
+═══════════════════════════════════════════════ */
+function filterTable(tableId, query) {
+  const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+  const q = query.toLowerCase();
+  rows.forEach(r => r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none');
+}
+
+/* ═══════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════ */
+function toast(msg, type='success') {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = `toast${type==='error'?' error':''}`;
+  t.innerHTML = `<i class="fas fa-${type==='error'?'exclamation-circle':'check-circle'}" style="color:${type==='error'?'var(--red)':'var(--green)'}"></i> ${msg}`;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+/* ═══════════════════════════════════════════════
+   INTEGRATION: listen for form submissions on main site
+   (If opened in same window via postMessage or shared storage)
+═══════════════════════════════════════════════ */
+window.addEventListener('storage', e => {
+  if (e.key === 'nn_messages') {
+    renderMessages();
+    updateStats();
+    toast('New message received!');
+    addActivity('New message received', 'yellow');
+  }
+});
+
+/* ═══════════════════════════════════════════════
+   TOPBAR DATE
+═══════════════════════════════════════════════ */
+function setDate() {
+  const d = new Date();
+  document.getElementById('topbarDate').textContent =
+    d.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+}
+setDate();
+
+</script>
+</body>
+</html>
