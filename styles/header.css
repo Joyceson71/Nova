@@ -63,8 +63,8 @@ header.hidden {
 }
 
 .left-section img {
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border: var(--border-width) solid var(--border-ink);
   border-radius: var(--radius-full);
   background: var(--cyber-yellow);
@@ -100,8 +100,7 @@ header.hidden {
   text-transform: uppercase;
   color: var(--anime-dark);
   text-shadow: 
-    2px 2px 0 var(--hero-blue),
-    4px 4px 0 var(--border-ink);
+    4px 4px 4px var(--hero-blue);
   letter-spacing: var(--tracking-wide);
   line-height: 1.2;
   font-weight: var(--font-bold);

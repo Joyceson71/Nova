@@ -1,7 +1,5 @@
-// Typing Animation Effect
-
 document.addEventListener('DOMContentLoaded', function() {
-  const typedTextElement = document.getElementById('typed-text');
+const typedTextElement = document.getElementById('typed-text');
   
   if (!typedTextElement) return;
 
@@ -31,23 +29,19 @@ document.addEventListener('DOMContentLoaded', function() {
       if (charIndex === 0) {
         isDeleting = false;
         textIndex = (textIndex + 1) % texts.length;
-        typingSpeed = 500; // Pause before typing next text
+        typingSpeed = 500; 
       }
     } else {
-      // Add characters
       typedTextElement.textContent = currentText.substring(0, charIndex + 1);
       charIndex++;
       typingSpeed = 100;
       
       if (charIndex === currentText.length) {
         isDeleting = true;
-        typingSpeed = pauseDelay; // Pause before deleting
+        typingSpeed = pauseDelay;
       }
     }
-    
-    setTimeout(type, typingSpeed);
+  setTimeout(type, typingSpeed);
   }
-
-  // Start typing animation
   setTimeout(type, 1000);
 });
