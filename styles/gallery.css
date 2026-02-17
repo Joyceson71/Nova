@@ -14,7 +14,6 @@
   padding: 3rem 0;
   z-index: 1;
 }
-
 .gallery-wrapper::before,
 .gallery-wrapper::after {
   content: '';
@@ -28,24 +27,11 @@
 
 .gallery-wrapper::before {
   left: 0;
-  background: linear-gradient(
-    to right, 
-    var(--anime-bg) 0%, 
-    rgba(244, 247, 250, 0.8) 50%,
-    transparent 100%
-  );
 }
 
 .gallery-wrapper::after {
   right: 0;
-  background: linear-gradient(
-    to left, 
-    var(--anime-bg) 0%, 
-    rgba(244, 247, 250, 0.8) 50%,
-    transparent 100%
-  );
 }
-
 .gallery-track {
   display: flex;
   gap: 2.5rem;
