@@ -73,9 +73,6 @@
   font-size: clamp(2rem, 6vw, 5rem);
   line-height: var(--leading-tight);
   color: var(--anime-dark);
-  text-shadow: 
-    4px 4px 0 var(--mecha-white), 
-    6px 6px 0 var(--border-ink);
   margin-bottom: 1rem;
   font-weight: var(--font-black);
   letter-spacing: var(--tracking-tight);
