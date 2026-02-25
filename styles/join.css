@@ -51,6 +51,10 @@
 
 /* ============ WELCOME BANNER ============ */
 .join-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   margin-bottom: 4rem;
   padding: 3rem 2rem;
@@ -93,7 +97,9 @@
 .banner-logo {
   width: 120px;
   height: 120px;
-  margin-bottom: 1.5rem;
+  display: block;
+  margin: 0 auto 1.5rem auto;
+  float: none;
   animation: float 3s ease-in-out infinite;
 }
 
@@ -117,6 +123,11 @@
   text-shadow: 
     3px 3px 0 var(--cyber-yellow),
     6px 6px 0 var(--power-pink);
+  width: 100%;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  text-align: center;
 }
 
 .banner-subtitle {
@@ -124,6 +135,9 @@
   color: var(--hero-blue);
   font-weight: 600;
   margin: 0;
+  text-align: center;
+  display: block;
+  width: 100%;
 }
 
 /* ============ BENEFITS GRID ============ */
@@ -692,6 +706,12 @@
 }
 
 /* ============ RESPONSIVE DESIGN ============ */
+@media (max-width: 1024px) {
+  .join-banner h1 {
+    font-size: 2.8rem;
+  }
+}
+
 @media (max-width: 768px) {
   .join-section {
     padding: 100px 1rem 2rem;
