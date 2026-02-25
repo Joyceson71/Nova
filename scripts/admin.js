@@ -1,22 +1,12 @@
-// ============================================
-// ADMIN.JS - Admin Panel Management System
-// Nova Nexus Club Administration
-// ============================================
 
-// Admin Credentials (In production, use backend authentication)
 const ADMIN_CREDENTIALS = {
-  username: 'admin',
-  password: 'admin123'
+  username: 'novaadmin',
+  password: 'nova@123'
 };
 
 // Current admin session
 let currentAdmin = null;
 let selectedMember = null;
-
-// ============================================
-// ADMIN AUTHENTICATION
-// ============================================
-
 function initAdminLogin() {
   const loginForm = document.getElementById('adminLoginForm');
   const passwordToggles = document.querySelectorAll('.toggle-password');
