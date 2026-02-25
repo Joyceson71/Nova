@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nova Nexus Club - Admin Panel">
+  <title>Admin Panel | Nova Nexus Club</title>
+
+  <link rel="shortcut icon" href="assets/novanexus-logo.png" type="image/x-icon">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body>
+  <canvas id="bg-canvas" aria-hidden="false"></canvas>
+
+  <!-- Admin Login Screen -->
+  <div id="adminLoginScreen" class="admin-login-screen active">
+    <div class="admin-login-card">
+      <div class="admin-logo">
+        <img src="assets/novanexus-logo.png" alt="Nova Nexus Logo">
+        <h1>ADMIN PANEL</h1>
+        <p>Nova Nexus Club Management</p>
+      </div>
+
+      <form id="adminLoginForm" class="admin-login-form">
+        <div class="form-group">
+          <label for="admin-username">
+            <i class="fas fa-user-shield"></i>
+            Admin Username
+          </label>
+          <input 
+            type="text" 
+            id="admin-username" 
+            placeholder="Enter admin username"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="admin-password">
+            <i class="fas fa-lock"></i>
+            Admin Password
+          </label>
+          <div class="password-input">
+            <input 
+              type="password" 
+              id="admin-password" 
+              placeholder="Enter admin password"
+              required
+            >
+            <button type="button" class="toggle-password">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="admin-login-btn">
+          <i class="fas fa-sign-in-alt"></i>
+          Access Admin Panel
+        </button>
+
+        <div class="admin-hint">
+          <i class="fas fa-info-circle"></i>
+          Default credentials: admin / admin123
+        </div>
+      </form>
+
+      <div class="back-link">
+        <a href="joinus.html">
+          <i class="fas fa-arrow-left"></i>
+          Back to Join Us
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="adminDashboard" class="admin-dashboard">
+    
+    <!-- Admin Header -->
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <img src="assets/novanexus-logo.png" alt="Nova Nexus Logo" class="admin-header-logo">
+        <div>
+          <h2>Admin Dashboard</h2>
+          <p>Nova Nexus Club Management</p>
+        </div>
+      </div>
+
+      <div class="admin-header-right">
+        <div class="admin-user-info">
+          <i class="fas fa-user-shield"></i>
+          <span id="adminNameDisplay">Admin</span>
+        </div>
+        <button id="logoutBtn" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon members">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-info">
+          <h3 id="totalMembers">0</h3>
+          <p>Total Members</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon pending">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="stat-info">
+          <h3 id="pendingApprovals">0</h3>
+          <p>Pending Approvals</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon events">
+          <i class="fas fa-calendar"></i>
+        </div>
+        <div class="stat-info">
+          <h3 id="activeEvents">3</h3>
+          <p>Active Events</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon verified">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="stat-info">
+          <h3 id="verifiedMembers">0</h3>
+          <p>Verified Members</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="members">
+        <i class="fas fa-users"></i>
+        Members
+      </button>
+      <button class="admin-tab" data-tab="pending">
+        <i class="fas fa-hourglass-half"></i>
+        Pending Approvals
+      </button>
+      <button class="admin-tab" data-tab="analytics">
+        <i class="fas fa-chart-bar"></i>
+        Analytics
+      </button>
+      <button class="admin-tab" data-tab="settings">
+        <i class="fas fa-cog"></i>
+        Settings
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+      
+      <!-- Members Tab -->
+      <div class="tab-panel active" id="membersTab">
+        <div class="panel-header">
+          <h2>Registered Members</h2>
+          <div class="panel-actions">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="memberSearch" placeholder="Search members...">
+            </div>
+            <button class="export-btn">
+              <i class="fas fa-download"></i>
+              Export CSV
+            </button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Year</th>
+                <th>Domain</th>
+                <th>Status</th>
+                <th>Registered</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="membersTableBody">
+              <!-- Populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pending Approvals Tab -->
+      <div class="tab-panel" id="pendingTab">
+        <div class="panel-header">
+          <h2>Pending Member Approvals</h2>
+        </div>
+
+        <div class="pending-list" id="pendingList">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Analytics Tab -->
+      <div class="tab-panel" id="analyticsTab">
+        <div class="panel-header">
+          <h2>Club Analytics</h2>
+        </div>
+
+        <div class="analytics-grid">
+          <div class="analytics-card">
+            <h3>Members by Year</h3>
+            <canvas id="yearChart"></canvas>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Domain Distribution</h3>
+            <canvas id="domainChart"></canvas>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Registration Trend</h3>
+            <canvas id="trendChart"></canvas>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Verification Status</h3>
+            <div class="verification-stats">
+              <div class="verification-item verified">
+                <i class="fas fa-check-circle"></i>
+                <span>Verified: <strong id="verifiedCount">0</strong></span>
+              </div>
+              <div class="verification-item unverified">
+                <i class="fas fa-times-circle"></i>
+                <span>Unverified: <strong id="unverifiedCount">0</strong></span>
+              </div>
+              <div class="verification-item pending">
+                <i class="fas fa-hourglass-half"></i>
+                <span>Pending: <strong id="pendingCount">0</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div class="tab-panel" id="settingsTab">
+        <div class="panel-header">
+          <h2>Admin Settings</h2>
+        </div>
+
+        <div class="settings-grid">
+          <div class="settings-card">
+            <h3><i class="fas fa-key"></i> Change Password</h3>
+            <form id="changePasswordForm">
+              <div class="form-group">
+                <label>Current Password</label>
+                <input type="password" required>
+              </div>
+              <div class="form-group">
+                <label>New Password</label>
+                <input type="password" required>
+              </div>
+              <div class="form-group">
+                <label>Confirm New Password</label>
+                <input type="password" required>
+              </div>
+              <button type="submit" class="settings-btn">Update Password</button>
+            </form>
+          </div>
+
+          <div class="settings-card">
+            <h3><i class="fas fa-bell"></i> Notifications</h3>
+            <div class="settings-options">
+              <label class="switch-label">
+                <input type="checkbox" checked>
+                <span class="switch"></span>
+                <span>Email notifications for new registrations</span>
+              </label>
+              <label class="switch-label">
+                <input type="checkbox" checked>
+                <span class="switch"></span>
+                <span>Event update notifications</span>
+              </label>
+              <label class="switch-label">
+                <input type="checkbox">
+                <span class="switch"></span>
+                <span>Weekly analytics report</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3><i class="fas fa-database"></i> Data Management</h3>
+            <div class="data-actions">
+              <button class="danger-btn">
+                <i class="fas fa-trash-alt"></i>
+                Clear All Pending Requests
+              </button>
+              <button class="danger-btn">
+                <i class="fas fa-exclamation-triangle"></i>
+                Reset All Member Data
+              </button>
+              <button class="export-btn">
+                <i class="fas fa-file-export"></i>
+                Export Complete Database
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Member Detail Modal -->
+  <div class="modal" id="memberDetailModal">
+    <div class="modal-content large">
+      <button class="modal-close" onclick="closeMemberModal()">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <div class="member-detail-header">
+        <div class="member-avatar">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="member-header-info">
+          <h2 id="memberDetailName"></h2>
+          <p id="memberDetailRoll"></p>
+        </div>
+        <span class="status-badge" id="memberDetailStatus"></span>
+      </div>
+
+      <div class="member-detail-body">
+        <div class="detail-section">
+          <h3><i class="fas fa-info-circle"></i> Personal Information</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>Email</label>
+              <p id="memberDetailEmail"></p>
+            </div>
+            <div class="detail-item">
+              <label>Phone</label>
+              <p id="memberDetailPhone"></p>
+            </div>
+            <div class="detail-item">
+              <label>Year of Study</label>
+              <p id="memberDetailYear"></p>
+            </div>
+            <div class="detail-item">
+              <label>Domain</label>
+              <p id="memberDetailDomain"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3><i class="fas fa-calendar"></i> Registration Details</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>Registered On</label>
+              <p id="memberDetailDate"></p>
+            </div>
+            <div class="detail-item">
+              <label>Member ID</label>
+              <p id="memberDetailId"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-actions">
+          <button class="action-btn verify" onclick="verifyMember()">
+            <i class="fas fa-check"></i>
+            Verify Member
+          </button>
+          <button class="action-btn send-email" onclick="sendEmail()">
+            <i class="fas fa-envelope"></i>
+            Send Email
+          </button>
+          <button class="action-btn delete" onclick="deleteMember()">
+            <i class="fas fa-trash"></i>
+            Delete Member
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="scripts/bg-geometric.js"></script>
+  <script src="scripts/admin.js"></script>
+</body>
+</html>

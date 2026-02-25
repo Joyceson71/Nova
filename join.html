@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Join Nova Nexus Club - Become a member of the ECE Department's technical club">
+  <title>Join Us | Nova Nexus Club</title>
+
+  <link rel="shortcut icon" href="assets/novanexus-logo.png" type="image/x-icon">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/join.css">
+</head>
+
+<body>
+  <canvas id="bg-canvas" aria-hidden="false"></canvas>
+
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress" role="progressbar" aria-label="Page scroll progress"></div>
+
+  <header role="banner">
+    <div class="left-section">
+      <img src="assets/kings-logo.png" alt="Kings Engineering College Logo" width="50" height="50">
+      <img src="assets/novanexus-logo.png" alt="Nova Nexus Logo" width="50" height="50">
+      <span aria-label="Nova Nexus Club">NOVA<br>NEXUS<br>CLUB</span>
+    </div>
+
+    <nav class="center-section" role="navigation" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#events">Events</a>
+      <a href="index.html#gallery">Gallery</a>
+      <a href="index.html#vision">Vision</a>
+      <a href="joinus.html" class="active">Join Us</a>
+    </nav>
+
+    <div class="right-section">
+      <a href="index.html#contact" class="contact-btn">Contact</a>
+    </div>
+
+    <button class="mobile-menu-btn" aria-label="Toggle mobile menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <!-- Mobile Navigation -->
+  <nav class="mobile-nav" role="navigation" aria-label="Mobile navigation">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#events">Events</a>
+    <a href="index.html#gallery">Gallery</a>
+    <a href="index.html#vision">Vision</a>
+    <a href="joinus.html">Join Us</a>
+    <a href="index.html#contact" class="contact">Contact</a>
+  </nav>
+
+  <!-- ============ JOIN US SECTION ============ -->
+  <section id="join" class="join-section">
+    <div class="join-container">
+      
+      <!-- Welcome Banner -->
+      <div class="join-banner reveal-scale">
+        <img src="assets/novanexus-logo.png" alt="Nova Nexus Logo" class="banner-logo">
+        <h1>JOIN NOVA NEXUS</h1>
+        <p class="banner-subtitle">Become Part of Something Extraordinary</p>
+      </div>
+
+      <!-- Benefits Section -->
+      <div class="benefits-grid">
+        <article class="benefit-card reveal">
+          <i class="fas fa-certificate" aria-hidden="true"></i>
+          <h3>Official Recognition</h3>
+          <p>Get official club membership certificate</p>
+        </article>
+
+        <article class="benefit-card reveal">
+          <i class="fas fa-project-diagram" aria-hidden="true"></i>
+          <h3>Exclusive Projects</h3>
+          <p>Access to cutting-edge technical projects</p>
+        </article>
+
+        <article class="benefit-card reveal">
+          <i class="fas fa-chalkboard-teacher" aria-hidden="true"></i>
+          <h3>Workshop Access</h3>
+          <p>Free entry to all technical workshops</p>
+        </article>
+
+        <article class="benefit-card reveal">
+          <i class="fas fa-trophy" aria-hidden="true"></i>
+          <h3>Competition Priority</h3>
+          <p>Priority registration for events</p>
+        </article>
+      </div>
+
+      <!-- Auth Container -->
+      <div class="auth-container">
+        
+        <!-- Login Form -->
+        <div class="auth-card login-card active" id="loginCard">
+          <div class="card-header">
+            <h2>Member Login</h2>
+            <p>Welcome back! Please login to your account</p>
+          </div>
+
+          <form id="loginForm" class="auth-form">
+            <div class="form-group">
+              <label for="login-email">
+                <i class="fas fa-envelope"></i>
+                Email Address
+              </label>
+              <input 
+                type="email" 
+                id="login-email" 
+                name="email" 
+                placeholder="your.email@example.com"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="login-password">
+                <i class="fas fa-lock"></i>
+                Password
+              </label>
+              <div class="password-input">
+                <input 
+                  type="password" 
+                  id="login-password" 
+                  name="password" 
+                  placeholder="Enter your password"
+                  required
+                >
+                <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-options">
+              <label class="checkbox-label">
+                <input type="checkbox" id="remember-me">
+                <span>Remember me</span>
+              </label>
+              <a href="#" class="forgot-link">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-sign-in-alt"></i>
+              Login
+            </button>
+
+            <div class="form-footer">
+              <p>Don't have an account? 
+                <a href="#" class="switch-form" data-target="signup">Sign Up</a>
+              </p>
+            </div>
+          </form>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div class="auth-card signup-card" id="signupCard">
+          <div class="card-header">
+            <h2>Create Account</h2>
+            <p>Join Nova Nexus Club today</p>
+          </div>
+
+          <form id="signupForm" class="auth-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="signup-firstname">
+                  <i class="fas fa-user"></i>
+                  First Name
+                </label>
+                <input 
+                  type="text" 
+                  id="signup-firstname" 
+                  name="firstname" 
+                  placeholder="John"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="signup-lastname">
+                  <i class="fas fa-user"></i>
+                  Last Name
+                </label>
+                <input 
+                  type="text" 
+                  id="signup-lastname" 
+                  name="lastname" 
+                  placeholder="Doe"
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-email">
+                <i class="fas fa-envelope"></i>
+                Email Address
+              </label>
+              <input 
+                type="email" 
+                id="signup-email" 
+                name="email" 
+                placeholder="your.email@kingsec.edu.in"
+                required
+              >
+              <small class="input-hint">Use your college email address</small>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-rollno">
+                <i class="fas fa-id-card"></i>
+                Roll Number
+              </label>
+              <input 
+                type="text" 
+                id="signup-rollno" 
+                name="rollno" 
+                placeholder="21ECEXXX"
+                pattern="[0-9]{2}ECE[0-9]{3}"
+                required
+              >
+              <small class="input-hint">Format: YYECEXXX (e.g., 21ECE123)</small>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="signup-year">
+                  <i class="fas fa-graduation-cap"></i>
+                  Year of Study
+                </label>
+                <select id="signup-year" name="year" required>
+                  <option value="">Select Year</option>
+                  <option value="1">First Year</option>
+                  <option value="2">Second Year</option>
+                  <option value="3">Third Year</option>
+                  <option value="4">Fourth Year</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="signup-phone">
+                  <i class="fas fa-phone"></i>
+                  Phone Number
+                </label>
+                <input 
+                  type="tel" 
+                  id="signup-phone" 
+                  name="phone" 
+                  placeholder="9876543210"
+                  pattern="[0-9]{10}"
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-domain">
+                <i class="fas fa-microchip"></i>
+                Area of Interest
+              </label>
+              <select id="signup-domain" name="domain" required>
+                <option value="">Select Domain</option>
+                <option value="embedded">Embedded Systems</option>
+                <option value="vlsi">VLSI Design</option>
+                <option value="iot">Internet of Things</option>
+                <option value="communications">Communications</option>
+                <option value="signal">Signal Processing</option>
+                <option value="robotics">Robotics</option>
+                <option value="ai">AI/ML in ECE</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-password">
+                <i class="fas fa-lock"></i>
+                Password
+              </label>
+              <div class="password-input">
+                <input 
+                  type="password" 
+                  id="signup-password" 
+                  name="password" 
+                  placeholder="Create a strong password"
+                  minlength="8"
+                  required
+                >
+                <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+              <div class="password-strength">
+                <div class="strength-bar">
+                  <div class="strength-fill"></div>
+                </div>
+                <span class="strength-text">Password Strength</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-confirm-password">
+                <i class="fas fa-lock"></i>
+                Confirm Password
+              </label>
+              <div class="password-input">
+                <input 
+                  type="password" 
+                  id="signup-confirm-password" 
+                  name="confirmPassword" 
+                  placeholder="Re-enter your password"
+                  required
+                >
+                <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="terms" required>
+                <span>I agree to the <a href="#" target="_blank">Terms & Conditions</a> and <a href="#" target="_blank">Privacy Policy</a></span>
+              </label>
+            </div>
+
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-user-plus"></i>
+              Create Account
+            </button>
+
+            <div class="form-footer">
+              <p>Already have an account? 
+                <a href="#" class="switch-form" data-target="login">Login</a>
+              </p>
+            </div>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Admin Access -->
+      <div class="admin-access">
+        <a href="admin.html" class="admin-link">
+          <i class="fas fa-user-shield"></i>
+          Admin Panel
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Success Modal -->
+  <div class="modal" id="successModal">
+    <div class="modal-content success">
+      <div class="modal-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>Registration Successful!</h3>
+      <p>Welcome to Nova Nexus Club. Check your email for verification.</p>
+      <button class="modal-btn" onclick="closeModal('successModal')">Continue</button>
+    </div>
+  </div>
+
+  <!-- Error Modal -->
+  <div class="modal" id="errorModal">
+    <div class="modal-content error">
+      <div class="modal-icon">
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+      <h3>Oops! Something went wrong</h3>
+      <p id="errorMessage">Please try again later.</p>
+      <button class="modal-btn" onclick="closeModal('errorModal')">Close</button>
+    </div>
+  </div>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Nova Nexus Club</h3>
+        <p>Department of Electronics & Communication Engineering</p>
+        <p>Kings Engineering College</p>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#events">Events</a></li>
+          <li><a href="index.html#vision">Vision</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Connect With Us</h3>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a><br><br>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a><br><br>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a><br><br>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a><br><br>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2026 Nova Nexus Club. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" aria-label="Scroll to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Scripts -->
+  <script src="scripts/bg-geometric.js"></script>
+  <script src="scripts/main.js"></script>
+  <script src="scripts/mobile.js"></script>
+  <script src="scripts/join.js"></script>
+</body>
+</html>
